@@ -14,28 +14,43 @@ document.querySelectorAll('.dropdown-parent').forEach(dropdown => {
   });
 });
 
+let scrollPos = 0;
 function toggleMenu() {
   const n = document.getElementById('navLinks');
   const c = document.getElementById('closeBtn');
+  const isOpen = !n.classList.contains('active');
   n.classList.toggle('active');
-  const isOpen = n.classList.contains('active');
-  document.body.style.overflow = isOpen ? 'hidden' : '';
+  if (isOpen) {
+    scrollPos = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollPos}px`;
+    document.body.style.width = '100%';
+  } else {
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    window.scrollTo(0, scrollPos);
+  }
   c.style.display = isOpen ? 'block' : 'none';
 }
-
 window.addEventListener('resize', () => {
   if (window.innerWidth > 768) {
     document.getElementById('navLinks').classList.remove('active');
-    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    if (scrollPos) window.scrollTo(0, scrollPos);
     document.querySelectorAll('.dropdown-parent').forEach(dp => dp.classList.remove('open'));
     document.getElementById('closeBtn').style.display = 'none';
   }
 });
-
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     document.getElementById('navLinks').classList.remove('active');
-    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    if (scrollPos) window.scrollTo(0, scrollPos);
     document.getElementById('closeBtn').style.display = 'none';
   }
 });
