@@ -186,6 +186,19 @@ footer { padding:clamp(70px,10vw,100px) 0 clamp(30px,4vw,40px); border-top:1px s
   .nav-links .dropdown-menu li a{display:block!important; width:100%!important; padding:8px 0!important; font-size:0.9rem!important; text-align:center!important;}
   .nav-wrap{padding:10px 22px; border-radius:50px;} .nav-wrap.scrolled{padding:7px 20px; border-radius:40px;}
   .footer-grid{grid-template-columns:1fr 1fr; gap:30px;} .footer-grid .footer-col:last-child{grid-column:span 2;} .footer-about{grid-column:span 2;}
+
+  .dropdown-toggle i { display:none; }
+  .dropdown-toggle {
+    display:inline-flex; align-items:center; justify-content:center; gap:4px;
+    background:transparent; border-radius:10px; padding:10px 20px;
+    transition:background 0.2s;
+  }
+  .dropdown-parent.open > .dropdown-toggle {
+    background:var(--border-color);
+  }
+  .dropdown-parent.open > .dropdown-toggle:active {
+    background:var(--sub-text);
+  }
 }
 @media (max-width:420px) {
   .container{padding:0 15px;} .nav-wrap{padding:8px 18px; border-radius:40px;} .nav-wrap.scrolled{padding:6px 15px; border-radius:35px;} .logo{font-size:1.05rem;} .hamburger-icon{font-size:1.1rem;} #closeBtn{top:15px; right:15px; font-size:1.8rem;}
