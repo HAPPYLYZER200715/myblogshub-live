@@ -19,10 +19,7 @@ document.querySelectorAll('.dropdown-parent').forEach(dropdown => {
     e.stopPropagation();
     this.classList.toggle('open');
     const icon = this.querySelector('.dropdown-toggle i');
-    if (icon) {
-      icon.classList.toggle('open');
-      alert('icon has open: ' + icon.classList.contains('open') + ' | parent has open: ' + this.classList.contains('open') + ' | parent has show: ' + this.classList.contains('show'));
-    }
+    if (icon) icon.classList.toggle('open');
     this.classList.remove('show');
   });
 });
