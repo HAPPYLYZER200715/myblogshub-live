@@ -1,7 +1,9 @@
 document.querySelectorAll('.dropdown-parent').forEach(dropdown => {
-  let timeout;
-  dropdown.addEventListener('mouseenter', () => { clearTimeout(timeout); dropdown.classList.add('show'); });
-  dropdown.addEventListener('mouseleave', () => { timeout = setTimeout(() => dropdown.classList.remove('show'), 200); });
+  if (window.innerWidth > 768) {
+    let timeout;
+    dropdown.addEventListener('mouseenter', () => { clearTimeout(timeout); dropdown.classList.add('show'); });
+    dropdown.addEventListener('mouseleave', () => { timeout = setTimeout(() => dropdown.classList.remove('show'), 200); });
+  }
   dropdown.addEventListener('click', function(e) {
     if (window.innerWidth <= 768) {
       if (e.target.closest('.dropdown-menu')) { return; }
