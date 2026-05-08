@@ -56,6 +56,8 @@ function resetDropdowns() {
   });
 }
 
+resetDropdowns();
+
 window.addEventListener('resize', () => {
   if (window.innerWidth > 768) {
     closeMenu();
