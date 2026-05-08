@@ -17,9 +17,8 @@ document.querySelectorAll('.dropdown-parent').forEach(dropdown => {
     if (e.target.closest('.dropdown-menu')) return;
     e.preventDefault();
     e.stopPropagation();
-    const wasOpen = this.classList.contains('open');
-    resetDropdowns();
-    if (!wasOpen) this.classList.add('open');
+    this.classList.remove('show');
+    this.classList.toggle('open');
   });
 });
 
