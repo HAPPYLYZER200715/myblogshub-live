@@ -52,9 +52,8 @@ header.hidden { transform: translateY(-120px); opacity: 0; pointer-events: none;
 /* Dropdown */
 .dropdown-parent { position:static; }
 .dropdown-toggle { cursor:pointer; display:flex; align-items:center; gap:6px; text-decoration:none; color:var(--text-color); font-size:0.8rem; font-weight:600; text-transform:uppercase; letter-spacing:1.5px; white-space:nowrap; }
-.dropdown-toggle i { font-size:0.6rem; transition:transform 0.4s cubic-bezier(0.19,1,0.22,1); will-change:transform; }
-.dropdown-parent.show .dropdown-toggle i,
-.dropdown-parent.open .dropdown-toggle i { transform:rotate(180deg); }
+.dropdown-toggle i { font-size:0.6rem; transition:transform 0.35s cubic-bezier(0.19,1,0.22,1); }
+.dropdown-parent.show .dropdown-toggle i { transform:rotate(180deg); }
 .dropdown-menu {
   position:static; left:auto; top:auto; transform:none;
   background:transparent; backdrop-filter:none; border:none;

@@ -17,8 +17,9 @@ document.querySelectorAll('.dropdown-parent').forEach(dropdown => {
     if (e.target.closest('.dropdown-menu')) return;
     e.preventDefault();
     e.stopPropagation();
-    this.classList.remove('show');
     this.classList.toggle('open');
+    const icon = this.querySelector('.dropdown-toggle i');
+    if (icon) icon.style.transform = this.classList.contains('open') ? 'rotate(180deg)' : '';
   });
 });
 
@@ -53,8 +54,12 @@ function resetDropdowns() {
   document.querySelectorAll('.dropdown-parent').forEach(dp => {
     dp.classList.remove('open');
     dp.classList.remove('show');
+    const icon = dp.querySelector('.dropdown-toggle i');
+    if (icon) icon.style.transform = '';
   });
 }
+
+resetDropdowns();
 
 resetDropdowns();
 
