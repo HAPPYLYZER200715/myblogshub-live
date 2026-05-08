@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MyBlogsHub – Premium Responsive Journal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .hero { padding:clamp(140px,22vh,220px) 0 clamp(50px,8vw,100px); text-align:center; }
+    .hero-tag {
+      font-size:clamp(0.6rem,0.9vw,0.7rem); text-transform:uppercase; letter-spacing:clamp(3px,1vw,6px);
+      color:var(--sub-text); margin-bottom:25px; display:block; font-weight:700;
+      animation:fadeUp 0.8s 0.2s cubic-bezier(0.19,1,0.22,1) both;
+    }
+    .hero h1 {
+      font-family:'Playfair Display',serif; font-size:clamp(2.2rem,8vw,6.8rem);
+      font-weight:800; line-height:0.95; letter-spacing:-2px; margin-bottom:35px;
+      animation:fadeUp 0.9s 0.35s cubic-bezier(0.19,1,0.22,1) both;
+    }
+    .hero h1 span { font-style:italic; font-weight:400; color:var(--sub-text); }
+    .filter-bar {
+      display:flex; justify-content:center; gap:clamp(15px,4vw,45px);
+      margin-bottom:clamp(50px,8vw,90px); border-bottom:1px solid var(--border-color);
+      padding-bottom:25px; overflow-x:auto; scrollbar-width:none; -ms-overflow-style:none; flex-wrap:nowrap;
+    }
+    .filter-bar::-webkit-scrollbar{display:none;}
+    .filter-item {
+      background:none; border:none; color:var(--sub-text); cursor:pointer;
+      font-family:'Inter',sans-serif; font-weight:600; font-size:clamp(0.72rem,1vw,0.85rem);
+      position:relative; text-transform:uppercase; letter-spacing:1px;
+      transition:color 0.3s, transform 0.3s; white-space:nowrap; padding:4px 0; flex-shrink:0;
+    }
+    .filter-item:hover { transform:translateY(-1px); }
+    .filter-item.active,.filter-item:hover { color:var(--text-color); }
+    .filter-item.active::after {
+      content:''; position:absolute; bottom:-26px; left:0; width:100%; height:2px;
+      background:var(--text-color); border-radius:1px; animation:slideIn 0.3s ease;
+    }
+    @keyframes slideIn { 0%{transform:scaleX(0);} 100%{transform:scaleX(1);} }
+    .blog-masonry { display:grid; grid-template-columns:repeat(12,1fr); gap:clamp(20px,3vw,40px); padding-bottom:clamp(60px,10vw,120px); }
+    .blog-card { grid-column:span 4; }
+    .blog-card.featured { grid-column:span 8; flex-direction:row; }
+    .featured .card-img-wrap { width:50%; height:auto; min-height:400px; aspect-ratio:unset; }
+    .featured .card-title { font-size:clamp(1.6rem,3.5vw,2.8rem); }
+    .blog-card.reveal:nth-child(2){transition-delay:0.1s;} .blog-card.reveal:nth-child(3){transition-delay:0.2s;} .blog-card.reveal:nth-child(4){transition-delay:0.3s;}
+    @media (max-width:1100px) {
+      .blog-card{grid-column:span 6;} .blog-card.featured{grid-column:span 12; flex-direction:column;}
+      .featured .card-img-wrap{width:100%; min-height:320px; aspect-ratio:16/9;}
+    }
+    @media (max-width:768px) {
+      .blog-card{grid-column:span 12;} .hero h1{font-size:3rem;} .filter-bar{gap:20px; justify-content:flex-start; padding:0 10px 20px;}
+    }
+    @media (max-width:420px) {
+      .hero{padding:110px 0 40px;} .hero h1{font-size:2rem;} .hero-tag{font-size:0.58rem; letter-spacing:2px;}
+      .featured .card-title{font-size:1.4rem;}
+      .blog-masonry{gap:16px;} .filter-bar{gap:12px; padding-bottom:16px;} .filter-item{font-size:0.65rem;}
+    }
+  </style>
+</head>
+<body class="light-theme">
+  <!-- Loader removed for testing -->
+
+  <header id="mainHeader">
+    <div class="nav-wrap" id="navWrap">
+      <div class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">MyBlogsHub</div>
+      <nav>
+        <ul class="nav-links" id="navLinks">
+          <!-- Journal Dropdown -->
+          <li class="dropdown-parent">
+            <a href="#" class="dropdown-toggle" onclick="event.preventDefault()">Journal <i class="fas fa-chevron-down"></i></a>
+            <ul class="dropdown-menu">
+              <li><a href="blogs.html?category=all" class="all-cat">All Categories</a></li>
+              <li><a href="blogs.html?category=technology">Technology</a></li>
+              <li><a href="blogs.html?category=lifestyle">Lifestyle</a></li>
+              <li><a href="blogs.html?category=design">Design</a></li>
+              <li><a href="blogs.html?category=culture">Culture</a></li>
+              <li><a href="blogs.html?category=productivity">Productivity</a></li>
+            </ul>
+          </li>
+          <!-- Podcasts Dropdown -->
+          <li class="dropdown-parent">
+            <a href="#" class="dropdown-toggle" onclick="event.preventDefault()">Podcasts <i class="fas fa-chevron-down"></i></a>
+            <ul class="dropdown-menu">
+              <li><a href="podcasts.html?category=all" class="all-cat">All Categories</a></li>
+              <li><a href="podcasts.html?category=technology">Technology</a></li>
+              <li><a href="podcasts.html?category=lifestyle">Lifestyle</a></li>
+              <li><a href="podcasts.html?category=design">Design</a></li>
+              <li><a href="podcasts.html?category=culture">Culture</a></li>
+              <li><a href="podcasts.html?category=productivity">Productivity</a></li>
+            </ul>
+          </li>
+          <li><a href="#">Categories</a></li>
+          <li><a href="#">Archives</a></li>
+          <li><button class="theme-toggle" id="themeToggle"><i class="fas fa-adjust"></i></button></li>
+          <li><a href="join-hub.html" class="join-hub-btn">Join Hub</a></li>
+        </ul>
+        <button class="hamburger-icon" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+      </nav>
+    </div>
+  </header>
+
+  <div id="closeBtn" onclick="toggleMenu()">&times;</div>
+
+  <main>
+    <section class="hero container">
+      <span class="hero-tag reveal">Insights · Culture · Lifestyle</span>
+      <h1 class="reveal">Words that <span>resonate.</span><br>Ideas that inspire.</h1>
+    </section>
+    <section class="container">
+      <div class="filter-bar reveal">
+        <button class="filter-item active">Latest Journals</button>
+        <button class="filter-item">Technology</button>
+        <button class="filter-item">Lifestyle</button>
+        <button class="filter-item">Design</button>
+        <button class="filter-item">Culture</button>
+      </div>
+      <div class="blog-masonry" id="blogGrid">
+        <article class="blog-card featured reveal">
+          <div class="card-img-wrap"><img src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1200&q=80" alt="Tech" loading="lazy"></div>
+          <div class="card-content">
+            <span class="card-meta">Technology / January 2025</span>
+            <h2 class="card-title">The Silence of Artificial Intelligence.</h2>
+            <p class="card-desc">Exploring how AI is not just changing code, but the very fabric of human thought, creativity, and silence.</p>
+            <a href="#" style="color:var(--text-color);font-weight:700;text-decoration:none;font-size:0.8rem;text-transform:uppercase;">Read Journal &rarr;</a>
+          </div>
+        </article>
+        <article class="blog-card reveal">
+          <div class="card-img-wrap"><img src="https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=800&q=80" alt="Travel" loading="lazy"></div>
+          <div class="card-content">
+            <span class="card-meta">Lifestyle / 5 min read</span>
+            <h2 class="card-title">Minimalist Travel.</h2>
+            <p class="card-desc">Finding profound freedom in the essentials while exploring the unknown corners of the globe.</p>
+          </div>
+        </article>
+        <article class="blog-card reveal">
+          <div class="card-img-wrap"><img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=800&q=80" alt="Work" loading="lazy"></div>
+          <div class="card-content">
+            <span class="card-meta">Productivity / 8 min read</span>
+            <h2 class="card-title">The Deep Work Habit.</h2>
+            <p class="card-desc">How to achieve maximum output in a world constantly screaming for your digital attention.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="container">
+    <div class="footer-grid">
+      <div class="footer-col footer-about">
+        <div class="footer-logo">MyBlogsHub</div>
+        <p>A sanctuary for thoughtful storytelling. We explore culture, technology, design, and the ideas shaping tomorrow.</p>
+        <div class="social-icons">
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="footer-col"><h4>Journal</h4><ul class="footer-links"><li><a href="blogs.html?category=all">Latest</a></li><li><a href="blogs.html?category=all">Popular</a></li><li><a href="blogs.html?category=all">Editors' Pick</a></li><li><a href="blogs.html?category=all">Archive</a></li></ul></div>
+      <div class="footer-col"><h4>Categories</h4><ul class="footer-links"><li><a href="blogs.html?category=technology">Technology</a></li><li><a href="blogs.html?category=lifestyle">Lifestyle</a></li><li><a href="blogs.html?category=design">Design</a></li><li><a href="blogs.html?category=culture">Culture</a></li></ul></div>
+      <div class="footer-col"><h4>Stay Inspired</h4><p style="color:var(--sub-text);font-size:clamp(0.78rem,1vw,0.9rem);margin-bottom:15px;">Weekly insights delivered to your inbox.</p><form class="newsletter-form" onsubmit="event.preventDefault();alert('Thank you for subscribing!');"><input type="email" placeholder="Your email address" required><button type="submit">Subscribe</button></form></div>
+    </div>
+    <div class="footer-bottom"><span>&copy; 2025 MyBlogsHub Journal. All rights reserved.</span><div><a href="#">Privacy Policy</a> &nbsp;·&nbsp; <a href="#">Terms of Service</a> &nbsp;·&nbsp; <a href="#">Cookies</a></div></div>
+  </footer>
+
+  <script src="js/script.js"></script>
+  <script>
+    document.querySelectorAll('.filter-item').forEach(item=>{ item.addEventListener('click',function(){ document.querySelectorAll('.filter-item').forEach(b=>b.classList.remove('active')); this.classList.add('active'); }); });
+  </script>
+</body>
+</html>

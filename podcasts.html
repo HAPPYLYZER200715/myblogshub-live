@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MyBlogsHub – All Podcasts</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    main { padding-top: clamp(140px, 18vh, 180px); padding-bottom: 60px; }
+    .podcasts-header { text-align:center; margin-bottom:50px; animation:fadeUp 0.8s 0.2s cubic-bezier(0.19,1,0.22,1) both; }
+    .podcasts-header h2 { font-family:'Playfair Display',serif; font-size:clamp(2rem,5vw,3.5rem); font-weight:800; letter-spacing:-1px; margin-bottom:10px; color:var(--text-color); }
+    .podcasts-header p { color:var(--sub-text); font-size:clamp(0.85rem,1.2vw,1rem); }
+    .podcasts-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(340px, 1fr)); gap:clamp(20px,2.5vw,32px); padding-bottom:80px; }
+    @media (max-width:1100px){ .podcasts-grid{ grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); } }
+    @media (max-width:768px){
+      .podcasts-grid{ grid-template-columns:1fr; }
+      main{padding-top:clamp(120px,15vh,150px);}
+    }
+    @media (max-width:420px){
+      main{padding-top:110px;}
+    }
+  </style>
+</head>
+<body class="light-theme">
+  <header id="mainHeader">
+    <div class="nav-wrap" id="navWrap">
+      <a href="index.html" class="logo">MyBlogsHub</a>
+      <nav>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="index.html">Home</a></li>
+          <li class="dropdown-parent">
+            <a href="#" class="dropdown-toggle" onclick="event.preventDefault()">Journal <i class="fas fa-chevron-down"></i></a>
+            <ul class="dropdown-menu">
+              <li><a href="blogs.html?category=all" class="all-cat">All Categories</a></li>
+              <li><a href="blogs.html?category=technology">Technology</a></li>
+              <li><a href="blogs.html?category=lifestyle">Lifestyle</a></li>
+              <li><a href="blogs.html?category=design">Design</a></li>
+              <li><a href="blogs.html?category=culture">Culture</a></li>
+              <li><a href="blogs.html?category=productivity">Productivity</a></li>
+            </ul>
+          </li>
+          <li class="dropdown-parent">
+            <a href="#" class="dropdown-toggle" onclick="event.preventDefault()">Podcasts <i class="fas fa-chevron-down"></i></a>
+            <ul class="dropdown-menu">
+              <li><a href="podcasts.html?category=all" class="all-cat">All Categories</a></li>
+              <li><a href="podcasts.html?category=technology">Technology</a></li>
+              <li><a href="podcasts.html?category=lifestyle">Lifestyle</a></li>
+              <li><a href="podcasts.html?category=design">Design</a></li>
+              <li><a href="podcasts.html?category=culture">Culture</a></li>
+              <li><a href="podcasts.html?category=productivity">Productivity</a></li>
+            </ul>
+          </li>
+          <li><a href="#">Categories</a></li>
+          <li><a href="#">Archives</a></li>
+          <li><button class="theme-toggle" id="themeToggle"><i class="fas fa-adjust"></i></button></li>
+          <li><a href="join-hub.html" class="join-hub-btn">Join Hub</a></li>
+        </ul>
+        <button class="hamburger-icon" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+      </nav>
+    </div>
+  </header>
+  <div id="closeBtn" onclick="toggleMenu()">&times;</div>
+
+  <main>
+    <div class="container">
+      <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Home</a>
+      <div class="podcasts-header">
+        <h2>All Podcasts</h2>
+        <p>Listen to inspiring conversations, stories, and deep dives from our creators.</p>
+      </div>
+      <div class="search-wrap">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" id="podcastSearch" placeholder="Search podcasts..." oninput="filterPodcasts()">
+        </div>
+      </div>
+      <div class="cat-filters" id="catFilters">
+        <a href="index.html" class="cat-pill all-pill">All</a>
+        <button class="cat-pill" data-cat="technology" onclick="setCategory('technology')">Technology</button>
+        <button class="cat-pill" data-cat="lifestyle" onclick="setCategory('lifestyle')">Lifestyle</button>
+        <button class="cat-pill" data-cat="design" onclick="setCategory('design')">Design</button>
+        <button class="cat-pill" data-cat="culture" onclick="setCategory('culture')">Culture</button>
+        <button class="cat-pill" data-cat="productivity" onclick="setCategory('productivity')">Productivity</button>
+      </div>
+      <div class="podcasts-grid" id="podcastsGrid"></div>
+    </div>
+  </main>
+
+  <footer class="container">
+    <div class="footer-grid">
+      <div class="footer-col footer-about">
+        <div class="footer-logo">MyBlogsHub</div>
+        <p>A sanctuary for thoughtful storytelling.</p>
+        <div class="social-icons">
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="footer-col"><h4>Journal</h4><ul class="footer-links"><li><a href="blogs.html?category=all">Latest</a></li><li><a href="blogs.html?category=all">Popular</a></li><li><a href="blogs.html?category=all">Editors' Pick</a></li><li><a href="blogs.html?category=all">Archive</a></li></ul></div>
+      <div class="footer-col"><h4>Categories</h4><ul class="footer-links"><li><a href="blogs.html?category=technology">Technology</a></li><li><a href="blogs.html?category=lifestyle">Lifestyle</a></li><li><a href="blogs.html?category=design">Design</a></li><li><a href="blogs.html?category=culture">Culture</a></li></ul></div>
+      <div class="footer-col"><h4>Stay Inspired</h4><form class="newsletter-form" onsubmit="event.preventDefault();alert('Subscribed!');"><input type="email" placeholder="Your email"><button type="submit">Subscribe</button></form></div>
+    </div>
+    <div class="footer-bottom"><span>&copy; 2025 MyBlogsHub Journal. All rights reserved.</span><div><a href="#">Privacy Policy</a> · <a href="#">Terms</a> · <a href="#">Cookies</a></div></div>
+  </footer>
+
+  <script src="js/script.js"></script>
+  <script>
+    const allPodcasts = [
+      { title:'The Future of AI Assistants', category:'technology', img:'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800&q=80', desc:'How AI is reshaping personal productivity and daily life.', meta:'Technology · 32 min' },
+      { title:'Slow Living in a Fast World', category:'lifestyle', img:'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80', desc:'Practical steps to embrace mindfulness and simplicity.', meta:'Lifestyle · 28 min' },
+      { title:'Design Thinking at Scale', category:'design', img:'https://images.unsplash.com/photo-1558655146-9f40138edfeb?auto=format&fit=crop&w=800&q=80', desc:'How large organizations implement human-centered design.', meta:'Design · 41 min' },
+      { title:'The Culture of Remote Work', category:'culture', img:'https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=800&q=80', desc:'Navigating identity and belonging in distributed teams.', meta:'Culture · 35 min' },
+      { title:'Deep Focus Habits', category:'productivity', img:'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=800&q=80', desc:'Mastering the art of concentrated work in a distracted age.', meta:'Productivity · 22 min' },
+      { title:'The Art of Podcasting', category:'design', img:'https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=800&q=80', desc:'Behind the scenes of creating a successful audio series.', meta:'Design · 38 min' },
+      { title:'Ethical Entrepreneurship', category:'technology', img:'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=800&q=80', desc:'Building a startup that balances profit and purpose.', meta:'Technology · 29 min' },
+      { title:'Culinary Adventures', category:'lifestyle', img:'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&w=800&q=80', desc:'Exploring global cuisines and the stories behind them.', meta:'Lifestyle · 42 min' },
+      { title:'Urban Planning Reimagined', category:'design', img:'https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=800&q=80', desc:'How cities are being designed for people, not cars.', meta:'Design · 31 min' },
+      { title:'The Sound of Culture', category:'culture', img:'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?auto=format&fit=crop&w=800&q=80', desc:'How music and podcasts are shaping modern culture.', meta:'Culture · 27 min' },
+      { title:'Mindful Productivity', category:'productivity', img:'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80', desc:'Combining mindfulness techniques with peak performance.', meta:'Productivity · 25 min' },
+      { title:'Green Technology Trends', category:'technology', img:'https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?auto=format&fit=crop&w=800&q=80', desc:'Innovations that are driving sustainability forward.', meta:'Technology · 33 min' }
+    ];
+
+    let currentCategory = 'all';
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialCat = urlParams.get('category') || 'all';
+    if (initialCat !== 'all') currentCategory = initialCat;
+
+    function renderPodcasts(filter='all', searchTerm='') {
+      const grid = document.getElementById('podcastsGrid');
+      let filtered = allPodcasts;
+      if (filter !== 'all') filtered = filtered.filter(p => p.category === filter);
+      if (searchTerm.trim()) { const s = searchTerm.trim().toLowerCase(); filtered = filtered.filter(p => p.title.toLowerCase().includes(s) || p.desc.toLowerCase().includes(s) || p.category.toLowerCase().includes(s)); }
+      if (filtered.length === 0) { grid.innerHTML = '<div class="no-results">No podcasts found. Try a different search or category.</div>'; return; }
+      grid.innerHTML = filtered.map((p,i) => `
+        <article class="podcast-card" style="animation:fadeUp 0.5s ${i*0.06}s cubic-bezier(0.19,1,0.22,1) both;">
+          <div class="card-img-wrap"><img src="${p.img}" alt="${p.title}" loading="lazy"></div>
+          <div class="card-content">
+            <span class="card-meta">${p.meta}</span>
+            <h2 class="card-title">${p.title}</h2>
+            <p class="card-desc">${p.desc}</p>
+            <a href="#" style="color:var(--text-color);font-weight:700;text-decoration:none;font-size:0.8rem;text-transform:uppercase;">Listen Now <i class="fas fa-play" style="margin-left:6px;"></i></a>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function filterPodcasts() { renderPodcasts(currentCategory, document.getElementById('podcastSearch').value); }
+    function setCategory(cat) {
+      currentCategory = cat;
+      document.querySelectorAll('#catFilters .cat-pill').forEach(p => p.classList.remove('active'));
+      document.querySelector(`#catFilters [data-cat="${cat}"]`).classList.add('active');
+      document.getElementById('podcastSearch').value = '';
+      renderPodcasts(cat);
+      const url = new URL(window.location); url.searchParams.set('category', cat); window.history.replaceState({}, '', url);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (currentCategory !== 'all') { const pill = document.querySelector(`#catFilters [data-cat="${currentCategory}"]`); if (pill) pill.classList.add('active'); renderPodcasts(currentCategory); }
+      else renderPodcasts('all');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Join Hub – MyBlogsHub</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    main { padding-top: clamp(140px, 20vh, 200px); padding-bottom: 80px; }
+    .back-btn { margin-bottom:40px; }
+    .join-hero { text-align:center; max-width:750px; margin:0 auto clamp(50px,5vw,70px); animation:fadeUp 0.8s 0.2s cubic-bezier(0.19,1,0.22,1) both; }
+    .join-hero h2 { font-family:'Playfair Display',serif; font-size:clamp(2.2rem,5.5vw,3.8rem); font-weight:800; letter-spacing:-1px; margin-bottom:12px; color:var(--text-color); }
+    .join-hero p { color:var(--sub-text); font-size:clamp(0.9rem,1.1vw,1rem); line-height:1.8; max-width:550px; margin:0 auto; }
+    .join-container { display:flex; gap:clamp(40px,6vw,80px); align-items:flex-start; margin-bottom:80px; }
+    .join-left { flex:1; }
+    .join-right { flex:1; background:var(--card-bg); border:1px solid var(--border-color); border-radius:24px; padding:clamp(30px,5vw,60px); }
+    .dark-theme .join-right { box-shadow:0 20px 50px rgba(0,0,0,0.3); }
+    .perks-mini { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+    .perk-item { display:flex; gap:14px; align-items:flex-start; padding:16px; background:var(--card-bg); border:1px solid var(--border-color); border-radius:14px; transition:all 0.35s; }
+    .perk-item:hover { transform:translateY(-3px); border-color:var(--text-color); }
+    .perk-item i { font-size:1.2rem; color:var(--text-color); margin-top:3px; flex-shrink:0; }
+    .perk-item div strong { display:block; font-size:0.85rem; font-weight:700; margin-bottom:2px; color:var(--text-color); }
+    .perk-item div span { font-size:0.75rem; color:var(--sub-text); }
+    .form-card h3 { font-family:'Playfair Display',serif; font-size:clamp(1.4rem,2.5vw,1.8rem); margin-bottom:6px; color:var(--text-color); }
+    .form-card .subtitle { color:var(--sub-text); font-size:0.85rem; margin-bottom:28px; }
+    .form-card .subtitle a { color:var(--text-color); font-weight:700; text-decoration:underline; }
+    .form-card .subtitle a:hover { opacity:0.6; }
+    .input-group { margin-bottom:20px; }
+    .input-group label { display:block; font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--sub-text); margin-bottom:7px; }
+    .input-group input, .input-group textarea { width:100%; background:transparent; border:1px solid var(--border-color); padding:12px 16px; font-family:'Inter',sans-serif; font-size:0.9rem; color:var(--text-color); border-radius:10px; outline:none; transition:border-color 0.3s, box-shadow 0.3s; }
+    .input-group input:focus, .input-group textarea:focus { border-color:var(--text-color); box-shadow:0 0 0 4px rgba(128,128,128,0.08); }
+    .input-group textarea { resize:vertical; min-height:90px; }
+    .submit-btn { width:100%; background:var(--text-color); color:var(--bg-color); border:none; padding:14px 30px; font-family:'Inter',sans-serif; font-weight:700; font-size:0.8rem; text-transform:uppercase; letter-spacing:1.5px; border-radius:100px; cursor:pointer; transition:all 0.35s; margin-top:8px; display:flex; align-items:center; justify-content:center; gap:10px; }
+    .submit-btn:hover { opacity:0.85; transform:translateY(-2px); box-shadow:0 10px 30px rgba(0,0,0,0.1); }
+    .alt-action { text-align:center; margin-top:20px; color:var(--sub-text); font-size:0.82rem; }
+    .alt-action a { color:var(--text-color); font-weight:700; text-decoration:none; transition:opacity 0.3s; }
+    .alt-action a:hover { opacity:0.6; }
+    footer { margin-top:60px; }
+    @media (max-width: 768px) {
+      .join-container { flex-direction: column; }
+      .perks-mini { grid-template-columns: 1fr; }
+      main { padding-top: clamp(120px,15vh,150px); }
+    }
+    @media (max-width: 420px) {
+      .join-right { padding: 25px 18px; }
+      .back-btn { margin-bottom:20px; }
+    }
+  </style>
+</head>
+<body class="light-theme">
+  <header id="mainHeader">
+    <div class="nav-wrap" id="navWrap">
+      <a href="index.html" class="logo">MyBlogsHub</a>
+      <nav>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="index.html">Home</a></li>
+          <li class="dropdown-parent">
+            <a href="#" class="dropdown-toggle" onclick="event.preventDefault()">Journal <i class="fas fa-chevron-down"></i></a>
+            <ul class="dropdown-menu">
+              <li><a href="blogs.html?category=all" class="all-cat">All Categories</a></li>
+              <li><a href="blogs.html?category=technology">Technology</a></li>
+              <li><a href="blogs.html?category=lifestyle">Lifestyle</a></li>
+              <li><a href="blogs.html?category=design">Design</a></li>
+              <li><a href="blogs.html?category=culture">Culture</a></li>
+              <li><a href="blogs.html?category=productivity">Productivity</a></li>
+            </ul>
+          </li>
+          <li class="dropdown-parent">
+            <a href="#" class="dropdown-toggle" onclick="event.preventDefault()">Podcasts <i class="fas fa-chevron-down"></i></a>
+            <ul class="dropdown-menu">
+              <li><a href="podcasts.html?category=all" class="all-cat">All Categories</a></li>
+              <li><a href="podcasts.html?category=technology">Technology</a></li>
+              <li><a href="podcasts.html?category=lifestyle">Lifestyle</a></li>
+              <li><a href="podcasts.html?category=design">Design</a></li>
+              <li><a href="podcasts.html?category=culture">Culture</a></li>
+              <li><a href="podcasts.html?category=productivity">Productivity</a></li>
+            </ul>
+          </li>
+          <li><a href="#">Categories</a></li>
+          <li><a href="#">Archives</a></li>
+          <li><button class="theme-toggle" id="themeToggle"><i class="fas fa-adjust"></i></button></li>
+          <li><a href="join-hub.html" class="join-hub-btn">Join Hub</a></li>
+        </ul>
+        <button class="hamburger-icon" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+      </nav>
+    </div>
+  </header>
+
+  <div id="closeBtn" onclick="toggleMenu()">&times;</div>
+
+  <main>
+    <div class="container">
+      <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Home</a>
+      <div class="join-hero">
+        <h2>Become a Member</h2>
+        <p>Unlock exclusive journals, podcasts, early releases, and a curated weekly digest — crafted for curious minds.</p>
+      </div>
+      <div class="join-container">
+        <div class="join-left">
+          <div class="perks-mini">
+            <div class="perk-item"><i class="fas fa-newspaper"></i><div><strong>Exclusive Journals</strong><span>Members-only deep dives</span></div></div>
+            <div class="perk-item"><i class="fas fa-podcast"></i><div><strong>Ad-Free Podcasts</strong><span>Listen without interruptions</span></div></div>
+            <div class="perk-item"><i class="fas fa-envelope-open-text"></i><div><strong>Weekly Digest</strong><span>Curated every Saturday</span></div></div>
+            <div class="perk-item"><i class="fas fa-comments"></i><div><strong>Community Chat</strong><span>Discuss with fellow readers</span></div></div>
+          </div>
+        </div>
+        <div class="join-right form-card">
+          <h3>Create your account</h3>
+          <p class="subtitle">Already a member? <a href="#">Sign in</a></p>
+          <form onsubmit="event.preventDefault(); alert('Welcome to the Hub! 🎉');">
+            <div class="input-group"><label>Full Name</label><input type="text" placeholder="Your name" required></div>
+            <div class="input-group"><label>Email Address</label><input type="email" placeholder="you@example.com" required></div>
+            <div class="input-group"><label>Password</label><input type="password" placeholder="At least 6 characters" required minlength="6"></div>
+            <div class="input-group"><label>What interests you?</label><textarea placeholder="Technology, design, culture..."></textarea></div>
+            <button type="submit" class="submit-btn">Join Hub <i class="fas fa-arrow-right" style="margin-left:8px;"></i></button>
+          </form>
+          <p class="alt-action">By joining you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="container">
+    <div class="footer-grid">
+      <div class="footer-col footer-about">
+        <div class="footer-logo">MyBlogsHub</div>
+        <p>A sanctuary for thoughtful storytelling.</p>
+        <div class="social-icons">
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="footer-col"><h4>Journal</h4><ul class="footer-links"><li><a href="blogs.html?category=all">Latest</a></li><li><a href="blogs.html?category=all">Popular</a></li><li><a href="blogs.html?category=all">Editors' Pick</a></li><li><a href="blogs.html?category=all">Archive</a></li></ul></div>
+      <div class="footer-col"><h4>Categories</h4><ul class="footer-links"><li><a href="blogs.html?category=technology">Technology</a></li><li><a href="blogs.html?category=lifestyle">Lifestyle</a></li><li><a href="blogs.html?category=design">Design</a></li><li><a href="blogs.html?category=culture">Culture</a></li></ul></div>
+      <div class="footer-col"><h4>Stay Inspired</h4><form class="newsletter-form" onsubmit="event.preventDefault();alert('Subscribed!');"><input type="email" placeholder="Your email"><button type="submit">Subscribe</button></form></div>
+    </div>
+    <div class="footer-bottom"><span>&copy; 2025 MyBlogsHub Journal. All rights reserved.</span><div><a href="#">Privacy Policy</a> · <a href="#">Terms</a> · <a href="#">Cookies</a></div></div>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
