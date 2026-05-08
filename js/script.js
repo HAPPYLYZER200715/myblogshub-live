@@ -20,7 +20,7 @@ document.querySelectorAll('.dropdown-parent').forEach(dropdown => {
     e.stopPropagation();
     this.classList.toggle('open');
     const icon = this.querySelector('.dropdown-toggle i');
-    if (icon) icon.style.transform = this.classList.contains('open') ? 'rotate(180deg)' : '';
+    if (icon) icon.classList.toggle('open');
   });
 });
 
@@ -56,7 +56,7 @@ function resetDropdowns() {
     dp.classList.remove('open');
     dp.classList.remove('show');
     const icon = dp.querySelector('.dropdown-toggle i');
-    if (icon) icon.style.transform = '';
+    if (icon) icon.classList.remove('open');
   });
 }
 
