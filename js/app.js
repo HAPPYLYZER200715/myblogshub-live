@@ -96,6 +96,7 @@ const themeToggle = document.getElementById('themeToggle');
 themeToggle.addEventListener('click', () => {
   document.body.classList.toggle('dark-theme');
   localStorage.setItem('mbh-theme', document.body.classList.contains('dark-theme') ? 'dark' : 'light');
+  if (window.__updateGlow) window.__updateGlow();
 });
 if (localStorage.getItem('mbh-theme') === 'dark') document.body.classList.add('dark-theme');
 
@@ -179,15 +180,22 @@ document.querySelectorAll('.stats-row, .stat-item').forEach(el => counterObserve
 // Very light blue blur spot following cursor (desktop only)
 if (window.innerWidth > 768 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   const glow = document.createElement('div');
+  function setGlowColor() {
+    const d = document.body.classList.contains('dark-theme');
+    glow.style.background = d
+      ? 'radial-gradient(circle, rgba(120,170,255,0.12) 0%, transparent 65%)'
+      : 'radial-gradient(circle, rgba(150,195,255,0.18) 0%, transparent 65%)';
+  }
   glow.style.cssText = `
-    position: fixed; top: 0; left: 0; width: 250px; height: 250px;
+    position: fixed; top: 0; left: 0; width: 280px; height: 280px;
     border-radius: 50%; pointer-events: none; z-index: 9999;
-    background: radial-gradient(circle, rgba(160,200,255,0.06) 0%, transparent 65%);
     transform: translate(-50%, -50%);
     opacity: 0; will-change: transform;
     transition: opacity 0.5s ease;
   `;
+  setGlowColor();
   document.body.appendChild(glow);
+  window.__updateGlow = setGlowColor;
 
   let ticking = false;
   document.addEventListener('mousemove', (e) => {
