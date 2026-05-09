@@ -192,14 +192,37 @@
       .features { grid-template-columns:1fr 1fr; }
     }
     @media (max-width:768px) {
-      main { padding-top:clamp(105px,13vh,130px); }
-      .features { grid-template-columns:1fr; }
+      main { padding-top:clamp(105px,13vh,130px); padding-bottom:70px; }
+      .join-header h1 { letter-spacing:-1px; }
+      .features { grid-template-columns:1fr; gap:14px; }
+      .feature-card { padding:20px; }
+      .feature-card span { font-size:0.8rem; }
       .stats-row { max-width:100%; }
+      .stat-item { padding:16px 12px; }
+      .stat-num { font-size:1.5rem; }
+      .stat-label { font-size:0.58rem; }
+      .form-card { padding:28px 22px; }
+      .input-wrap input, .input-wrap textarea { padding:22px 16px 8px; font-size:0.95rem; }
+      .input-wrap label { left:16px; font-size:0.9rem; }
+      .input-wrap input:focus + label, .input-wrap input:not(:placeholder-shown) + label,
+      .input-wrap textarea:focus + label, .input-wrap textarea:not(:placeholder-shown) + label { top:6px; font-size:0.62rem; }
+      .submit-btn { padding:15px 28px; font-size:0.8rem; }
+      .join-header h1 { font-size:2.6rem; }
+      .join-header p { font-size:0.95rem; }
+      .testimonial { margin-top:40px; padding:24px 0 0; }
+      .testimonial blockquote { font-size:1.05rem; }
     }
     @media (max-width:420px) {
-      .form-card { padding:20px 14px; }
-      .feature-card { padding:14px; }
-      .stat-item { padding:14px 10px; }
+      main { padding-bottom:50px; }
+      .join-header h1 { font-size:2.2rem; }
+      .join-header p { margin-bottom:22px; }
+      .form-card { padding:22px 16px; }
+      .feature-card { padding:16px; }
+      .feature-card strong { font-size:0.85rem; }
+      .feature-card span { font-size:0.78rem; }
+      .stat-item { padding:12px 8px; }
+      .submit-btn { padding:14px 22px; font-size:0.75rem; }
+      .testimonial blockquote { font-size:0.95rem; }
     }
   </style>
 </head>
