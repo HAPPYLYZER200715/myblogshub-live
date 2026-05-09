@@ -177,54 +177,5 @@ const counterObserver = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.stats-row, .stat-item').forEach(el => counterObserver.observe(el));
 
-// Subtle blue cursor trail (desktop only)
-if (window.innerWidth > 768 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  const trail = [];
-  const count = 12;
-  const container = document.createElement('div');
-  container.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;';
-  document.body.appendChild(container);
 
-  for (let i = 0; i < count; i++) {
-    const dot = document.createElement('div');
-    const scale = 1 - (i / count);
-    dot.style.cssText = `
-      position:fixed; border-radius:50%; pointer-events:none;
-      width:${6 + scale * 8}px; height:${6 + scale * 8}px;
-      background:rgba(100,170,255,${0.08 + scale * 0.18});
-      transform:translate(-50%,-50%);
-      transition:opacity 0.3s ease;
-    `;
-    container.appendChild(dot);
-    trail.push({ el: dot, x: 0, y: 0 });
-  }
 
-  let mx = 0, my = 0, active = false, fadeTimer = null;
-
-  document.addEventListener('mousemove', (e) => { mx = e.clientX; my = e.clientY; active = true;
-    clearTimeout(fadeTimer);
-    fadeTimer = setTimeout(() => { active = false; }, 200);
-  });
-  document.addEventListener('mouseleave', () => { active = false; clearTimeout(fadeTimer); });
-
-  function updateTrail() {
-    if (active) {
-      trail[0].x += (mx - trail[0].x) * 0.25;
-      trail[0].y += (my - trail[0].y) * 0.25;
-      trail[0].el.style.opacity = '1';
-      trail[0].el.style.transform = `translate(${trail[0].x}px, ${trail[0].y}px)`;
-      for (let i = 1; i < count; i++) {
-        const prev = trail[i - 1];
-        const curr = trail[i];
-        curr.x += (prev.x - curr.x) * 0.18;
-        curr.y += (prev.y - curr.y) * 0.18;
-        curr.el.style.transform = `translate(${curr.x}px, ${curr.y}px)`;
-        curr.el.style.opacity = '1';
-      }
-    } else {
-      trail.forEach(d => d.el.style.opacity = '0');
-    }
-    requestAnimationFrame(updateTrail);
-  }
-  updateTrail();
-}
