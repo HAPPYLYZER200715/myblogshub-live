@@ -7,44 +7,122 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
   <style>
-    main { padding-top: clamp(140px, 20vh, 200px); padding-bottom: 80px; }
-    .back-btn { margin-bottom:40px; }
-    .join-hero { text-align:center; max-width:750px; margin:0 auto clamp(50px,5vw,70px); animation:fadeUp 0.8s 0.2s cubic-bezier(0.19,1,0.22,1) both; }
-    .join-hero h2 { font-family:'Playfair Display',serif; font-size:clamp(2.2rem,5.5vw,3.8rem); font-weight:800; letter-spacing:-1px; margin-bottom:12px; color:var(--text-color); }
-    .join-hero p { color:var(--sub-text); font-size:clamp(0.9rem,1.1vw,1rem); line-height:1.8; max-width:550px; margin:0 auto; }
-    .join-container { display:flex; gap:clamp(40px,6vw,80px); align-items:flex-start; margin-bottom:80px; }
-    .join-left { flex:1; }
-    .join-right { flex:1; background:var(--card-bg); border:1px solid var(--border-color); border-radius:24px; padding:clamp(30px,5vw,60px); }
-    .dark-theme .join-right { box-shadow:0 20px 50px rgba(0,0,0,0.3); }
-    .perks-mini { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
-    .perk-item { display:flex; gap:14px; align-items:flex-start; padding:16px; background:var(--card-bg); border:1px solid var(--border-color); border-radius:14px; transition:all 0.35s; }
-    .perk-item:hover { transform:translateY(-3px); border-color:var(--text-color); }
-    .perk-item i { font-size:1.2rem; color:var(--text-color); margin-top:3px; flex-shrink:0; }
-    .perk-item div strong { display:block; font-size:0.85rem; font-weight:700; margin-bottom:2px; color:var(--text-color); }
-    .perk-item div span { font-size:0.75rem; color:var(--sub-text); }
-    .form-card h3 { font-family:'Playfair Display',serif; font-size:clamp(1.4rem,2.5vw,1.8rem); margin-bottom:6px; color:var(--text-color); }
-    .form-card .subtitle { color:var(--sub-text); font-size:0.85rem; margin-bottom:28px; }
-    .form-card .subtitle a { color:var(--text-color); font-weight:700; text-decoration:underline; }
+    main { padding-top: clamp(130px, 18vh, 180px); padding-bottom: 100px; }
+    .join-header { text-align:center; max-width:800px; margin:0 auto clamp(60px,6vw,80px); }
+    .join-header .badge {
+      display:inline-block; padding:6px 18px; border-radius:100px; border:1px solid var(--border-color);
+      font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:2px;
+      color:var(--sub-text); margin-bottom:20px;
+      animation:fadeUp 0.6s 0.1s cubic-bezier(0.19,1,0.22,1) both;
+    }
+    .join-header h2 {
+      font-family:'Playfair Display',serif; font-size:clamp(2.4rem,6vw,4.2rem); font-weight:900;
+      letter-spacing:-2px; margin-bottom:16px; color:var(--text-color); line-height:1.05;
+      animation:fadeUp 0.7s 0.2s cubic-bezier(0.19,1,0.22,1) both;
+    }
+    .join-header h2 span { font-style:italic; font-weight:400; color:var(--sub-text); }
+    .join-header p {
+      color:var(--sub-text); font-size:clamp(0.9rem,1.15vw,1.05rem); line-height:1.8;
+      max-width:550px; margin:0 auto;
+      animation:fadeUp 0.8s 0.3s cubic-bezier(0.19,1,0.22,1) both;
+    }
+    .join-grid { display:grid; grid-template-columns:1fr 1fr; gap:clamp(30px,5vw,60px); align-items:start; margin-bottom:40px; }
+    .benefits { display:flex; flex-direction:column; gap:16px; }
+    .benefit-card {
+      display:flex; gap:18px; align-items:flex-start; padding:clamp(18px,2.5vw,24px);
+      background:var(--card-bg); border:1px solid var(--border-color); border-radius:16px;
+      transition:all 0.4s cubic-bezier(0.19,1,0.22,1);
+      opacity:0; transform:translateY(20px);
+      animation:fadeUp 0.5s both;
+    }
+    .benefit-card:nth-child(1){animation-delay:0.1s;}
+    .benefit-card:nth-child(2){animation-delay:0.2s;}
+    .benefit-card:nth-child(3){animation-delay:0.3s;}
+    .benefit-card:nth-child(4){animation-delay:0.4s;}
+    .benefit-card:hover { transform:translateY(-4px); border-color:var(--text-color); box-shadow:0 12px 40px rgba(0,0,0,0.06); }
+    .dark-theme .benefit-card:hover { box-shadow:0 12px 40px rgba(0,0,0,0.25); }
+    .benefit-icon {
+      width:44px; height:44px; border-radius:12px; background:var(--border-color);
+      display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:1.1rem;
+      transition:all 0.35s;
+    }
+    .benefit-card:hover .benefit-icon { background:var(--text-color); color:var(--bg-color); }
+    .benefit-text { flex:1; }
+    .benefit-text strong { display:block; font-size:0.85rem; font-weight:700; margin-bottom:3px; color:var(--text-color); }
+    .benefit-text span { font-size:0.78rem; color:var(--sub-text); line-height:1.5; display:block; }
+    .form-card {
+      background:var(--card-bg); border:1px solid var(--border-color); border-radius:20px;
+      padding:clamp(28px,4vw,48px); position:relative; overflow:hidden;
+      opacity:0; transform:translateY(20px);
+      animation:fadeUp 0.6s 0.2s cubic-bezier(0.19,1,0.22,1) both;
+    }
+    .form-card::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:4px;
+      background:linear-gradient(90deg, var(--text-color), var(--sub-text));
+      opacity:0.3;
+    }
+    .form-card h3 { font-family:'Playfair Display',serif; font-size:clamp(1.3rem,2.2vw,1.6rem); margin-bottom:4px; color:var(--text-color); }
+    .form-card .subtitle { color:var(--sub-text); font-size:0.82rem; margin-bottom:28px; }
+    .form-card .subtitle a { color:var(--text-color); font-weight:700; text-decoration:underline; transition:opacity 0.3s; }
     .form-card .subtitle a:hover { opacity:0.6; }
-    .input-group { margin-bottom:20px; }
-    .input-group label { display:block; font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--sub-text); margin-bottom:7px; }
-    .input-group input, .input-group textarea { width:100%; background:transparent; border:1px solid var(--border-color); padding:12px 16px; font-family:'Inter',sans-serif; font-size:0.9rem; color:var(--text-color); border-radius:10px; outline:none; transition:border-color 0.3s, box-shadow 0.3s; }
-    .input-group input:focus, .input-group textarea:focus { border-color:var(--text-color); box-shadow:0 0 0 4px rgba(128,128,128,0.08); }
-    .input-group textarea { resize:vertical; min-height:90px; }
-    .submit-btn { width:100%; background:var(--text-color); color:var(--bg-color); border:none; padding:14px 30px; font-family:'Inter',sans-serif; font-weight:700; font-size:0.8rem; text-transform:uppercase; letter-spacing:1.5px; border-radius:100px; cursor:pointer; transition:all 0.35s; margin-top:8px; display:flex; align-items:center; justify-content:center; gap:10px; }
-    .submit-btn:hover { opacity:0.85; transform:translateY(-2px); box-shadow:0 10px 30px rgba(0,0,0,0.1); }
-    .alt-action { text-align:center; margin-top:20px; color:var(--sub-text); font-size:0.82rem; }
+    .input-group { margin-bottom:18px; position:relative; }
+    .input-group label {
+      display:block; font-size:0.7rem; font-weight:700; text-transform:uppercase;
+      letter-spacing:1.2px; color:var(--sub-text); margin-bottom:6px; transition:color 0.3s;
+    }
+    .input-group:focus-within label { color:var(--text-color); }
+    .input-group input, .input-group textarea {
+      width:100%; background:var(--bg-color); border:1px solid var(--border-color);
+      padding:12px 16px; font-family:'Inter',sans-serif; font-size:0.9rem;
+      color:var(--text-color); border-radius:10px; outline:none;
+      transition:border-color 0.35s cubic-bezier(0.19,1,0.22,1), box-shadow 0.35s cubic-bezier(0.19,1,0.22,1);
+    }
+    .input-group input:focus, .input-group textarea:focus {
+      border-color:var(--text-color); box-shadow:0 0 0 5px rgba(128,128,128,0.06);
+    }
+    .input-group textarea { resize:vertical; min-height:80px; }
+    .submit-btn {
+      width:100%; background:var(--text-color); color:var(--bg-color); border:none;
+      padding:14px 28px; font-family:'Inter',sans-serif; font-weight:700;
+      font-size:0.78rem; text-transform:uppercase; letter-spacing:1.5px;
+      border-radius:100px; cursor:pointer; margin-top:4px;
+      transition:all 0.4s cubic-bezier(0.19,1,0.22,1);
+      display:flex; align-items:center; justify-content:center; gap:10px;
+    }
+    .submit-btn:hover { opacity:0.88; transform:translateY(-2px); box-shadow:0 12px 30px rgba(0,0,0,0.12); }
+    .submit-btn:active { transform:scale(0.97); }
+    .alt-action { text-align:center; margin-top:18px; color:var(--sub-text); font-size:0.8rem; }
     .alt-action a { color:var(--text-color); font-weight:700; text-decoration:none; transition:opacity 0.3s; }
     .alt-action a:hover { opacity:0.6; }
-    footer { margin-top:60px; }
-    @media (max-width: 768px) {
-      .join-container { flex-direction: column; }
-      .perks-mini { grid-template-columns: 1fr; }
-      main { padding-top: clamp(120px,15vh,150px); }
+    .social-proof {
+      display:flex; align-items:center; justify-content:center; gap:12px; margin-top:60px;
+      padding:20px 0; border-top:1px solid var(--border-color);
+      opacity:0; animation:fadeUp 0.7s 0.5s cubic-bezier(0.19,1,0.22,1) both;
     }
-    @media (max-width: 420px) {
-      .join-right { padding: 25px 18px; }
-      .back-btn { margin-bottom:20px; }
+    .social-proof .avatars { display:flex; }
+    .social-proof .avatars span {
+      width:36px; height:36px; border-radius:50%; border:2px solid var(--bg-color);
+      display:flex; align-items:center; justify-content:center;
+      font-size:0.65rem; font-weight:700; color:var(--bg-color);
+      margin-right:-8px; overflow:hidden;
+    }
+    .social-proof .avatars span:nth-child(1){background:#1a1a1a; z-index:4;}
+    .social-proof .avatars span:nth-child(2){background:#4a4a4a; z-index:3;}
+    .social-proof .avatars span:nth-child(3){background:#6a6a6a; z-index:2;}
+    .social-proof .avatars span:nth-child(4){background:#8a8a8a; z-index:1; font-size:0.55rem;}
+    .social-proof p { font-size:0.78rem; color:var(--sub-text); }
+    .social-proof p strong { color:var(--text-color); font-weight:700; }
+    @media (max-width:860px) {
+      .join-grid { grid-template-columns:1fr; }
+      .benefits { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    }
+    @media (max-width:768px) {
+      main { padding-top:clamp(120px,15vh,150px); }
+      .benefits { grid-template-columns:1fr; }
+      .social-proof { flex-direction:column; text-align:center; }
+    }
+    @media (max-width:420px) {
+      .form-card { padding:22px 16px; }
     }
   </style>
 </head>
@@ -91,21 +169,31 @@
 
   <main>
     <div class="container">
-      <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Home</a>
-      <div class="join-hero">
-        <h2>Become a Member</h2>
-        <p>Unlock exclusive journals, podcasts, early releases, and a curated weekly digest — crafted for curious minds.</p>
+      <div class="join-header">
+        <div class="badge">Limited Spots</div>
+        <h2>Join the <span>Circle</span></h2>
+        <p>Unlock exclusive journals, ad-free podcasts, early releases, and a weekly digest — crafted for curious minds.</p>
       </div>
-      <div class="join-container">
-        <div class="join-left">
-          <div class="perks-mini">
-            <div class="perk-item"><i class="fas fa-newspaper"></i><div><strong>Exclusive Journals</strong><span>Members-only deep dives</span></div></div>
-            <div class="perk-item"><i class="fas fa-podcast"></i><div><strong>Ad-Free Podcasts</strong><span>Listen without interruptions</span></div></div>
-            <div class="perk-item"><i class="fas fa-envelope-open-text"></i><div><strong>Weekly Digest</strong><span>Curated every Saturday</span></div></div>
-            <div class="perk-item"><i class="fas fa-comments"></i><div><strong>Community Chat</strong><span>Discuss with fellow readers</span></div></div>
+      <div class="join-grid">
+        <div class="benefits">
+          <div class="benefit-card">
+            <div class="benefit-icon"><i class="fas fa-newspaper"></i></div>
+            <div class="benefit-text"><strong>Exclusive Journals</strong><span>Members-only deep dives you won't find anywhere else.</span></div>
+          </div>
+          <div class="benefit-card">
+            <div class="benefit-icon"><i class="fas fa-podcast"></i></div>
+            <div class="benefit-text"><strong>Ad-Free Podcasts</strong><span>Listen without interruptions — pure storytelling.</span></div>
+          </div>
+          <div class="benefit-card">
+            <div class="benefit-icon"><i class="fas fa-envelope-open-text"></i></div>
+            <div class="benefit-text"><strong>Weekly Digest</strong><span>Handpicked reads delivered every Saturday morning.</span></div>
+          </div>
+          <div class="benefit-card">
+            <div class="benefit-icon"><i class="fas fa-comments"></i></div>
+            <div class="benefit-text"><strong>Community Chat</strong><span>Discuss ideas with fellow readers and writers.</span></div>
           </div>
         </div>
-        <div class="join-right form-card">
+        <div class="form-card">
           <h3>Create your account</h3>
           <p class="subtitle">Already a member? <a href="#">Sign in</a></p>
           <form onsubmit="event.preventDefault(); alert('Welcome to the Hub! 🎉');">
@@ -113,10 +201,16 @@
             <div class="input-group"><label>Email Address</label><input type="email" placeholder="you@example.com" required></div>
             <div class="input-group"><label>Password</label><input type="password" placeholder="At least 6 characters" required minlength="6"></div>
             <div class="input-group"><label>What interests you?</label><textarea placeholder="Technology, design, culture..."></textarea></div>
-            <button type="submit" class="submit-btn">Join Hub <i class="fas fa-arrow-right" style="margin-left:8px;"></i></button>
+            <button type="submit" class="submit-btn">Join the Circle <i class="fas fa-arrow-right"></i></button>
           </form>
           <p class="alt-action">By joining you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.</p>
         </div>
+      </div>
+      <div class="social-proof">
+        <div class="avatars">
+          <span>A</span><span>M</span><span>K</span><span>+</span>
+        </div>
+        <p>Join <strong>500+</strong> members already in the circle</p>
       </div>
     </div>
   </main>
