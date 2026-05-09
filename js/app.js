@@ -183,16 +183,16 @@ if (window.innerWidth > 768 && !window.matchMedia('(prefers-reduced-motion: redu
   function setGlowColor() {
     const d = document.body.classList.contains('dark-theme');
     glow.style.background = d
-      ? 'radial-gradient(circle at center, rgba(130,180,255,0.06) 0%, rgba(100,160,255,0.03) 40%, transparent 70%)'
-      : 'radial-gradient(circle at center, rgba(140,190,255,0.08) 0%, rgba(120,170,255,0.04) 40%, transparent 70%)';
+      ? 'radial-gradient(circle at center, rgba(130,185,255,0.15) 0%, rgba(100,160,255,0.07) 40%, transparent 70%)'
+      : 'radial-gradient(circle at center, rgba(140,195,255,0.2) 0%, rgba(120,170,255,0.1) 40%, transparent 70%)';
   }
   glow.style.cssText = `
     position: fixed; top: 0; left: 0; width: 350px; height: 350px;
     border-radius: 50%; pointer-events: none; z-index: 9999;
     transform: translate(-50%, -50%);
     opacity: 0; will-change: transform;
-    transition: opacity 0.6s ease;
-    filter: blur(50px);
+    transition: opacity 0.8s ease;
+    filter: blur(35px);
   `;
   setGlowColor();
   document.body.appendChild(glow);
@@ -214,8 +214,8 @@ if (window.innerWidth > 768 && !window.matchMedia('(prefers-reduced-motion: redu
   });
 
   function drift() {
-    currentX += (targetX - currentX) * 0.06;
-    currentY += (targetY - currentY) * 0.06;
+    currentX += (targetX - currentX) * 0.08;
+    currentY += (targetY - currentY) * 0.08;
     glow.style.transform = `translate(${currentX}px, ${currentY}px)`;
     requestAnimationFrame(drift);
   }
