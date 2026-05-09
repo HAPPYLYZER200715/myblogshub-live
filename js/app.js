@@ -1,5 +1,6 @@
 let scrollPos = 0;
 
+// Dropdown logic
 document.querySelectorAll('.dropdown-parent').forEach(dropdown => {
   let timeout;
   dropdown.addEventListener('mouseenter', () => {
@@ -90,6 +91,7 @@ document.addEventListener('click', (e) => {
   resetDropdowns();
 });
 
+// Theme toggle
 const themeToggle = document.getElementById('themeToggle');
 themeToggle.addEventListener('click', () => {
   document.body.classList.toggle('dark-theme');
@@ -97,15 +99,31 @@ themeToggle.addEventListener('click', () => {
 });
 if (localStorage.getItem('mbh-theme') === 'dark') document.body.classList.add('dark-theme');
 
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+// Enhanced reveal observer with staggered delays
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry, idx) => {
+    if (entry.isIntersecting) {
+      const delay = entry.target.dataset.revealDelay || 0;
+      setTimeout(() => entry.target.classList.add('visible'), Number(delay));
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
+document.querySelectorAll('.reveal').forEach((el, i) => {
+  if (!el.dataset.revealDelay) {
+    const baseDelay = Math.min(i * 80, 400);
+    el.dataset.revealDelay = baseDelay;
+  }
+  revealObserver.observe(el);
+});
+
+// Header scroll handling
 const header = document.getElementById('mainHeader');
 const navWrap = document.getElementById('navWrap');
 let lastScroll = 0;
 let ticking = false;
+
 window.addEventListener('scroll', () => {
   if (!ticking) {
     requestAnimationFrame(() => {
@@ -124,3 +142,63 @@ window.addEventListener('scroll', () => {
     ticking = true;
   }
 }, { passive: true });
+
+// Counter animation for stats
+function animateCounter(el) {
+  const target = parseInt(el.dataset.target, 10);
+  if (!target || target === 0) return;
+  const duration = 1200;
+  const start = performance.now();
+  function update(now) {
+    const progress = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.floor(eased * target);
+    if (progress < 1) requestAnimationFrame(update);
+    else el.textContent = target + (el.dataset.suffix || '');
+  }
+  requestAnimationFrame(update);
+}
+
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.querySelectorAll('[data-target]').forEach(el => {
+        const suffix = el.dataset.suffix || '';
+        const original = el.textContent;
+        if (!el.dataset.target) el.dataset.target = original.replace(/[^0-9]/g, '');
+        el.dataset.suffix = suffix;
+        animateCounter(el);
+      });
+      counterObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.3 });
+
+document.querySelectorAll('.stats-row, .stat-item').forEach(el => counterObserver.observe(el));
+
+// Subtle cursor glow (only on desktop, GPU-optimized)
+if (window.innerWidth > 768 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const glow = document.createElement('div');
+  glow.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 300px; height: 300px;
+    border-radius: 50%; pointer-events: none; z-index: 9999;
+    background: radial-gradient(circle, rgba(128,128,128,0.04) 0%, transparent 70%);
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s ease;
+    opacity: 0; will-change: transform;
+  `;
+  document.body.appendChild(glow);
+
+  let glowTicking = false;
+  document.addEventListener('mousemove', (e) => {
+    if (!glowTicking) {
+      requestAnimationFrame(() => {
+        glow.style.transform = `translate(${e.clientX - 150}px, ${e.clientY - 150}px)`;
+        if (!glow.style.opacity || glow.style.opacity === '0') glow.style.opacity = '1';
+        glowTicking = false;
+      });
+      glowTicking = true;
+    }
+  });
+  document.addEventListener('mouseleave', () => { glow.style.opacity = '0'; });
+}
