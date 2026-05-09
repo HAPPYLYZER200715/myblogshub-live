@@ -177,21 +177,22 @@ const counterObserver = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.stats-row, .stat-item').forEach(el => counterObserver.observe(el));
 
-// Very light blue blur spot following cursor (desktop only)
+// Misty blue gas-like aura following cursor (desktop only)
 if (window.innerWidth > 768 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   const glow = document.createElement('div');
   function setGlowColor() {
     const d = document.body.classList.contains('dark-theme');
     glow.style.background = d
-      ? 'radial-gradient(circle, rgba(120,170,255,0.07) 0%, transparent 65%)'
-      : 'radial-gradient(circle, rgba(140,185,255,0.1) 0%, transparent 65%)';
+      ? 'radial-gradient(circle at center, rgba(130,180,255,0.06) 0%, rgba(100,160,255,0.03) 40%, transparent 70%)'
+      : 'radial-gradient(circle at center, rgba(140,190,255,0.08) 0%, rgba(120,170,255,0.04) 40%, transparent 70%)';
   }
   glow.style.cssText = `
-    position: fixed; top: 0; left: 0; width: 160px; height: 160px;
+    position: fixed; top: 0; left: 0; width: 350px; height: 350px;
     border-radius: 50%; pointer-events: none; z-index: 9999;
     transform: translate(-50%, -50%);
     opacity: 0; will-change: transform;
-    transition: opacity 0.5s ease;
+    transition: opacity 0.6s ease;
+    filter: blur(50px);
   `;
   setGlowColor();
   document.body.appendChild(glow);
