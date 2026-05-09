@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  // === Smooth reveal with spring-like staggered timing ===
+  // === Smooth reveal observer ===
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
@@ -13,7 +13,7 @@
     });
   }, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
 
-  document.querySelectorAll('.reveal').forEach((el, i) => {
+  document.querySelectorAll('.reveal, .reveal-scale').forEach((el, i) => {
     if (!el.dataset.revealDelay) {
       const base = Math.min(i * 90, 500);
       el.dataset.revealDelay = base;
@@ -21,7 +21,55 @@
     revealObserver.observe(el);
   });
 
-  // === Smooth parallax on hero images ===
+  // === 3D Tilt on cards ===
+  let tiltTicking = false;
+  document.querySelectorAll('.tilt-card').forEach(card => {
+    const inner = card.querySelector('.tilt-card-inner') || card;
+    card.addEventListener('mousemove', e => {
+      if (tiltTicking) return;
+      tiltTicking = true;
+      requestAnimationFrame(() => {
+        const rect = card.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        inner.style.transform = `perspective(1200px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg)`;
+        tiltTicking = false;
+      });
+    });
+    card.addEventListener('mouseleave', () => {
+      inner.style.transform = 'perspective(1200px) rotateY(0deg) rotateX(0deg)';
+    });
+  });
+
+  // === Ripple effect on all buttons ===
+  document.querySelectorAll('.ripple-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      const rect = this.getBoundingClientRect();
+      const r = document.createElement('span');
+      r.className = 'ripple';
+      const size = Math.max(rect.width, rect.height);
+      r.style.width = r.style.height = size + 'px';
+      r.style.left = (e.clientX - rect.left - size / 2) + 'px';
+      r.style.top = (e.clientY - rect.top - size / 2) + 'px';
+      this.appendChild(r);
+      setTimeout(() => r.remove(), 600);
+    });
+  });
+
+  // === Magnetic nav links ===
+  document.querySelectorAll('.nav-links a:not(.join-hub-btn), .logo').forEach(el => {
+    el.addEventListener('mousemove', e => {
+      const rect = el.getBoundingClientRect();
+      const x = (e.clientX - rect.left - rect.width / 2) * 0.15;
+      const y = (e.clientY - rect.top - rect.height / 2) * 0.15;
+      el.style.transform = `translate(${x}px, ${y}px)`;
+    });
+    el.addEventListener('mouseleave', () => {
+      el.style.transform = '';
+    });
+  });
+
+  // === Smooth parallax on elements ===
   let parallaxTicking = false;
   document.querySelectorAll('[data-parallax]').forEach(el => {
     const speed = parseFloat(el.dataset.parallax) || 0.15;
@@ -164,7 +212,7 @@
     }
   }
 
-  // === Header scroll behavior (smooth) ===
+  // === Header scroll behavior ===
   const header = document.getElementById('mainHeader');
   const navWrap = document.getElementById('navWrap');
   let lastScroll = 0;
@@ -194,14 +242,15 @@
   function animateCounter(el) {
     const target = parseInt(el.dataset.target, 10);
     if (!target || target === 0) return;
-    const duration = 1500;
+    const duration = 1800;
     const start = performance.now();
     function update(now) {
       const progress = Math.min((now - start) / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
-      el.textContent = Math.floor(eased * target);
+      const current = Math.floor(eased * target);
+      el.textContent = current.toLocaleString();
       if (progress < 1) requestAnimationFrame(update);
-      else el.textContent = target + (el.dataset.suffix || '');
+      else el.textContent = target.toLocaleString() + (el.dataset.suffix || '');
     }
     requestAnimationFrame(update);
   }
@@ -223,7 +272,7 @@
 
   document.querySelectorAll('.stats-row, .stat-item').forEach(el => counterObserver.observe(el));
 
-  // === Smooth scroll for all anchor links ===
+  // === Smooth scroll for anchor links ===
   document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {
       const id = a.getAttribute('href');
@@ -233,6 +282,20 @@
         e.preventDefault();
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
+    });
+  });
+
+  // === Page transition on internal links ===
+  document.querySelectorAll('a:not([href^="#"]):not([href^="http"]):not([href^="https"]):not([target="_blank"])').forEach(a => {
+    const href = a.getAttribute('href');
+    if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('https') || href.startsWith('mailto') || href.startsWith('tel')) return;
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const dest = href;
+      document.body.style.opacity = '0';
+      document.body.style.transform = 'translateY(10px) scale(0.98)';
+      document.body.style.transition = 'opacity 0.35s var(--smooth), transform 0.35s var(--smooth)';
+      setTimeout(() => { window.location.href = dest; }, 350);
     });
   });
 

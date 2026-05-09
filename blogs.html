@@ -77,11 +77,11 @@
       </div>
       <div class="cat-filters" id="catFilters">
         <a href="index.html" class="cat-pill all-pill">All</a>
-        <button class="cat-pill" data-cat="technology" onclick="setCategory('technology')">Technology</button>
-        <button class="cat-pill" data-cat="lifestyle" onclick="setCategory('lifestyle')">Lifestyle</button>
-        <button class="cat-pill" data-cat="design" onclick="setCategory('design')">Design</button>
-        <button class="cat-pill" data-cat="culture" onclick="setCategory('culture')">Culture</button>
-        <button class="cat-pill" data-cat="productivity" onclick="setCategory('productivity')">Productivity</button>
+        <button class="cat-pill ripple-btn" data-cat="technology" onclick="setCategory('technology')">Technology</button>
+        <button class="cat-pill ripple-btn" data-cat="lifestyle" onclick="setCategory('lifestyle')">Lifestyle</button>
+        <button class="cat-pill ripple-btn" data-cat="design" onclick="setCategory('design')">Design</button>
+        <button class="cat-pill ripple-btn" data-cat="culture" onclick="setCategory('culture')">Culture</button>
+        <button class="cat-pill ripple-btn" data-cat="productivity" onclick="setCategory('productivity')">Productivity</button>
       </div>
       <div class="blogs-grid" id="blogsGrid"></div>
     </div>
@@ -136,9 +136,9 @@
       if (searchTerm.trim()) { const s = searchTerm.trim().toLowerCase(); filtered = filtered.filter(b => b.title.toLowerCase().includes(s) || b.desc.toLowerCase().includes(s) || b.category.toLowerCase().includes(s)); }
       if (filtered.length === 0) { grid.innerHTML = '<div class="no-results">No journals found. Try a different search or category.</div>'; return; }
       grid.innerHTML = filtered.map((b,i) => `
-        <article class="blog-card" style="animation:fadeUp 0.5s ${i*0.06}s cubic-bezier(0.19,1,0.22,1) both;">
+        <article class="blog-card tilt-card" style="animation:fadeUp 0.5s ${i*0.06}s cubic-bezier(0.19,1,0.22,1) both;">
           <div class="card-img-wrap"><img src="${b.img}" alt="${b.title}" loading="lazy"></div>
-          <div class="card-content">
+          <div class="card-content tilt-card-inner">
             <span class="card-meta">${b.meta}</span>
             <h2 class="card-title">${b.title}</h2>
             <p class="card-desc">${b.desc}</p>
