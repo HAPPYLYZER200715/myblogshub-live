@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile – H.x.H</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    main { position:relative; padding-top:clamp(110px,15vh,150px); padding-bottom:100px; overflow:hidden; z-index:1; }
+
+    .profile-hero { text-align:center; max-width:680px; margin:0 auto clamp(50px,4vw,60px); }
+    .profile-avatar {
+      width: clamp(90px,12vw,130px); height: clamp(90px,12vw,130px);
+      border-radius:50%; margin:0 auto 18px;
+      background:var(--border-color); overflow:hidden;
+      display:flex; align-items:center; justify-content:center;
+      border:2px solid var(--border-color); position:relative;
+      animation:scaleBounce 0.8s var(--snap) both;
+    }
+    .profile-avatar img { width:100%; height:100%; object-fit:cover; }
+    .profile-avatar .avatar-placeholder {
+      font-size:3rem; color:var(--sub-text); opacity:0.3;
+      font-family:'Playfair Display',serif; font-weight:900;
+    }
+    .profile-hero .status-dot {
+      width:14px;height:14px;border-radius:50%;background:#22c55e;
+      display:inline-block;position:relative;margin-right:6px;
+      animation:pulseDot 2s ease-in-out infinite;
+    }
+    .profile-hero .status-dot::after {
+      content:'';position:absolute;inset:-3px;border-radius:50%;
+      border:2px solid rgba(34,197,94,0.3);animation:pulseDot 2s ease-in-out infinite 0.5s;
+    }
+    .profile-hero h1 {
+      font-family:'Playfair Display',serif; font-size:clamp(2rem,5vw,3.2rem); font-weight:900;
+      letter-spacing:-2px; line-height:1.05; margin-bottom:4px;
+      animation:fadeUp 0.6s 0.15s var(--smooth) both;
+    }
+    .profile-hero .role-tag {
+      font-size:clamp(0.72rem,1vw,0.85rem); color:var(--sub-text); font-weight:500;
+      margin-bottom:14px; display:flex; align-items:center; justify-content:center; gap:6px;
+      animation:fadeUp 0.6s 0.2s var(--smooth) both;
+    }
+    .profile-hero .bio {
+      color:var(--sub-text); font-size:clamp(0.85rem,1.05vw,0.95rem); line-height:1.8;
+      max-width:520px; margin:0 auto 18px;
+      animation:fadeUp 0.7s 0.25s var(--smooth) both;
+    }
+    .profile-social {
+      display:flex; justify-content:center; gap:10px;
+      animation:fadeUp 0.7s 0.3s var(--smooth) both;
+    }
+    .profile-social a {
+      width:38px;height:38px;border-radius:50%;border:1px solid var(--border-color);
+      display:flex;align-items:center;justify-content:center;
+      color:var(--sub-text);text-decoration:none;font-size:0.9rem;
+      transition:all 0.4s var(--spring);
+    }
+    .profile-social a:hover {
+      background:var(--text-color);color:var(--bg-color);border-color:var(--text-color);
+      transform:translateY(-3px) scale(1.08);box-shadow:0 6px 20px rgba(0,0,0,0.06);
+    }
+
+    .profile-stats {
+      display:grid; grid-template-columns:repeat(4,1fr); gap:1px; max-width:600px;
+      margin:0 auto clamp(60px,5vw,80px); border-radius:16px; overflow:hidden;
+      background:var(--border-color);
+      animation:fadeUp 0.7s 0.35s var(--smooth) both;
+    }
+    .profile-stat {
+      background:var(--card-bg); padding:clamp(16px,2vw,24px) 12px; text-align:center;
+      transition:background 0.3s;
+    }
+    .profile-stat:hover { background:var(--border-color); }
+    .profile-stat-num {
+      font-family:'Playfair Display',serif; font-size:clamp(1.3rem,2.2vw,1.8rem);
+      font-weight:900; color:var(--text-color); display:block; line-height:1.1;
+    }
+    .profile-stat-label {
+      font-size:0.6rem; text-transform:uppercase; letter-spacing:1.5px; color:var(--sub-text); font-weight:600;
+    }
+
+    .profile-section { margin-bottom:clamp(50px,6vw,80px); }
+    .profile-section .section-head {
+      text-align:center; margin-bottom:clamp(24px,3vw,36px);
+      animation:fadeUp 0.6s 0.1s var(--smooth) both;
+    }
+    .profile-section .section-head h2 {
+      font-family:'Playfair Display',serif; font-size:clamp(1.4rem,3vw,2.2rem);
+      font-weight:800; letter-spacing:-1px; color:var(--text-color); margin-bottom:4px;
+    }
+    .profile-section .section-head p {
+      color:var(--sub-text); font-size:0.82rem;
+    }
+
+    .profile-grid-2 {
+      display:grid; grid-template-columns:1fr 1fr; gap:clamp(16px,2.5vw,28px);
+    }
+
+    .profile-card {
+      background:var(--card-bg); border:1px solid var(--border-color); border-radius:16px;
+      padding:clamp(20px,3vw,32px); position:relative; overflow:hidden;
+      transition:all 0.5s var(--spring);
+      animation:fadeUp 0.7s var(--smooth) both;
+    }
+    .profile-card::before {
+      content:'';position:absolute;inset:-2px;border-radius:18px;
+      background:linear-gradient(135deg,transparent 40%,var(--border-color) 50%,transparent 60%);
+      background-size:200% 200%;opacity:0;transition:opacity 0.6s var(--smooth);z-index:-1;
+    }
+    .profile-card:hover::before { opacity:1; animation:cardBorderFlow 3s ease-in-out infinite; }
+    .profile-card:hover { transform:translateY(-4px) scale(1.01); border-color:var(--border-color); box-shadow:var(--shadow-hover); }
+    .profile-card .card-head {
+      display:flex; align-items:center; gap:14px; margin-bottom:14px;
+    }
+    .profile-card .card-icon {
+      width:44px;height:44px;border-radius:12px;background:var(--border-color);
+      display:flex;align-items:center;justify-content:center;font-size:1.1rem;
+      flex-shrink:0;transition:all 0.35s var(--smooth);
+    }
+    .profile-card:hover .card-icon { background:var(--text-color); color:var(--bg-color); }
+    .profile-card h3 { font-size:0.95rem; font-weight:700; color:var(--text-color); }
+    .profile-card p { font-size:0.82rem; color:var(--sub-text); line-height:1.7; }
+    .profile-card .skill-tags { display:flex; gap:6px; flex-wrap:wrap; margin-top:12px; }
+    .profile-card .skill-tag {
+      font-size:0.6rem; text-transform:uppercase; letter-spacing:1px; font-weight:700;
+      padding:4px 12px; border-radius:100px; border:1px solid var(--border-color);
+      color:var(--sub-text); transition:all 0.3s var(--smooth);
+    }
+    .profile-card .skill-tag:hover { background:var(--text-color); color:var(--bg-color); border-color:var(--text-color); }
+
+    .timeline { position:relative; }
+    .timeline::before {
+      content:''; position:absolute; left:21px; top:0; bottom:0;
+      width:1px; background:var(--border-color);
+    }
+    .timeline-item {
+      display:flex; gap:16px; padding-bottom:24px; position:relative;
+      animation:fadeUp 0.6s var(--smooth) both;
+    }
+    .timeline-item:last-child { padding-bottom:0; }
+    .timeline-dot {
+      width:10px;height:10px;border-radius:50%;background:var(--text-color);
+      margin-top:5px; flex-shrink:0; position:relative; z-index:1;
+      transition:transform 0.35s var(--spring);
+    }
+    .timeline-item:hover .timeline-dot { transform:scale(1.5); }
+    .timeline-content h4 { font-size:0.9rem; font-weight:700; color:var(--text-color); margin-bottom:2px; }
+    .timeline-content .timeline-meta { font-size:0.7rem; color:var(--sub-text); margin-bottom:4px; }
+    .timeline-content p { font-size:0.8rem; color:var(--sub-text); line-height:1.6; }
+
+    .contact-card {
+      max-width:520px; margin:0 auto; text-align:center;
+      background:var(--card-bg); border:1px solid var(--border-color); border-radius:20px;
+      padding:clamp(28px,4vw,48px); animation:fadeUp 0.7s 0.1s var(--smooth) both;
+      position:relative; overflow:hidden;
+    }
+    .contact-card::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:3px;
+      background:linear-gradient(90deg,var(--text-color),var(--sub-text),var(--text-color));
+      background-size:200% 100%; animation:borderGlow 4s ease-in-out infinite;
+    }
+    .contact-card h2 {
+      font-family:'Playfair Display',serif; font-size:clamp(1.5rem,3vw,2.2rem);
+      font-weight:900; letter-spacing:-1px; margin-bottom:6px; color:var(--text-color);
+    }
+    .contact-card p { color:var(--sub-text); font-size:0.88rem; margin-bottom:24px; }
+    .contact-card .contact-links {
+      display:flex; justify-content:center; gap:12px; flex-wrap:wrap;
+    }
+    .contact-card .contact-btn {
+      display:inline-flex; align-items:center; gap:8px;
+      padding:11px 24px; border-radius:100px; border:1px solid var(--border-color);
+      font-family:'Inter',sans-serif; font-size:0.75rem; font-weight:700;
+      text-transform:uppercase; letter-spacing:1px; cursor:pointer;
+      background:transparent; color:var(--sub-text); text-decoration:none;
+      transition:all 0.4s var(--spring);
+      position:relative; overflow:hidden;
+    }
+    .contact-card .contact-btn:hover {
+      background:var(--text-color); color:var(--bg-color); border-color:var(--text-color);
+      transform:translateY(-3px) scale(1.03); box-shadow:0 8px 25px rgba(0,0,0,0.06);
+    }
+
+    @media (max-width:860px) {
+      .profile-grid-2 { grid-template-columns:1fr; }
+      .profile-stats { grid-template-columns:repeat(2,1fr); }
+    }
+    @media (max-width:768px) {
+      main { padding-top:clamp(105px,13vh,130px); padding-bottom:70px; }
+      .profile-stats { grid-template-columns:repeat(2,1fr); }
+    }
+    @media (max-width:420px) {
+      .profile-stats { grid-template-columns:repeat(2,1fr); }
+      .profile-hero .bio { font-size:0.85rem; }
+      .profile-stat-num { font-size:1.3rem; }
+    }
+  </style>
+</head>
+<body class="light-theme">
+  <header id="mainHeader">
+    <div class="nav-wrap" id="navWrap">
+      <a href="index.html" class="logo">MyBlogsHub</a>
+      <nav>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="index.html">Home</a></li>
+          <li class="dropdown-parent">
+            <span class="dropdown-toggle">Journal <i class="fas fa-chevron-down"></i></span>
+            <ul class="dropdown-menu">
+              <li><a href="blogs.html?category=all" class="all-cat">All Categories</a></li>
+              <li><a href="blogs.html?category=technology">Technology</a></li>
+              <li><a href="blogs.html?category=lifestyle">Lifestyle</a></li>
+              <li><a href="blogs.html?category=design">Design</a></li>
+              <li><a href="blogs.html?category=culture">Culture</a></li>
+              <li><a href="blogs.html?category=productivity">Productivity</a></li>
+            </ul>
+          </li>
+          <li class="dropdown-parent">
+            <span class="dropdown-toggle">Podcasts <i class="fas fa-chevron-down"></i></span>
+            <ul class="dropdown-menu">
+              <li><a href="podcasts.html?category=all" class="all-cat">All Categories</a></li>
+              <li><a href="podcasts.html?category=technology">Technology</a></li>
+              <li><a href="podcasts.html?category=lifestyle">Lifestyle</a></li>
+              <li><a href="podcasts.html?category=design">Design</a></li>
+              <li><a href="podcasts.html?category=culture">Culture</a></li>
+              <li><a href="podcasts.html?category=productivity">Productivity</a></li>
+            </ul>
+          </li>
+          <li><a href="profile.html">Profile</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><button class="theme-toggle" id="themeToggle"><i class="fas fa-adjust"></i></button></li>
+          <li><a href="join-hub.html" class="join-hub-btn ripple-btn">Join Hub</a></li>
+        </ul>
+        <button class="hamburger-icon" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+      </nav>
+    </div>
+  </header>
+
+  <div id="closeBtn" onclick="toggleMenu()">&times;</div>
+
+  <main>
+    <div class="container">
+      <div class="profile-hero">
+        <div class="profile-avatar">
+          <span class="avatar-placeholder">H</span>
+        </div>
+        <div class="role-tag"><span class="status-dot"></span> Available for collaborations</div>
+        <h1>H.x.H</h1>
+        <div class="role-tag"><i class="fas fa-feather-alt" style="font-size:0.65rem;"></i> Writer & Curator <span class="dot">&middot;</span> <i class="fas fa-microphone" style="font-size:0.65rem;"></i> Podcaster <span class="dot">&middot;</span> <i class="fas fa-palette" style="font-size:0.65rem;"></i> Designer</div>
+        <p class="bio">Crafting stories at the intersection of technology, culture, and human experience. Building a sanctuary for thoughtful minds in a noisy world.</p>
+        <div class="profile-social">
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+
+      <div class="profile-stats">
+        <div class="profile-stat"><span class="profile-stat-num" data-target="128">0</span><span class="profile-stat-label">Journals</span></div>
+        <div class="profile-stat"><span class="profile-stat-num" data-target="64">0</span><span class="profile-stat-label">Podcasts</span></div>
+        <div class="profile-stat"><span class="profile-stat-num" data-target="3400">0</span><span class="profile-stat-label">Subscribers</span></div>
+        <div class="profile-stat"><span class="profile-stat-num" data-target="12">0</span><span class="profile-stat-label">Awards</span></div>
+      </div>
+
+      <div class="profile-section">
+        <div class="section-head"><h2>About Me</h2><p>A glimpse into the person behind the journal.</p></div>
+        <div class="profile-grid-2">
+          <div class="profile-card tilt-card">
+            <div class="card-head">
+              <div class="card-icon"><i class="fas fa-compass"></i></div>
+              <h3>My Journey</h3>
+            </div>
+            <p>What started as a personal notebook in 2020 evolved into a growing community of curious minds. Every piece I write is an invitation to think deeper, feel more, and embrace the beauty of slowness in a fast-paced digital world.</p>
+          </div>
+          <div class="profile-card tilt-card">
+            <div class="card-head">
+              <div class="card-icon"><i class="fas fa-tools"></i></div>
+              <h3>Crafted With</h3>
+            </div>
+            <p>I believe great stories need great tools. Every journal and podcast is shaped with intention — from hand-picked typography to carefully composed audio landscapes.</p>
+            <div class="skill-tags">
+              <span class="skill-tag">Writing</span>
+              <span class="skill-tag">Design</span>
+              <span class="skill-tag">Audio</span>
+              <span class="skill-tag">Photography</span>
+              <span class="skill-tag">Code</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <div class="section-head"><h2>Timeline</h2><p>Moments that shaped the journey.</p></div>
+        <div style="max-width:600px;margin:0 auto;">
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <h4>Founded H.x.H</h4>
+                <div class="timeline-meta">2024 &middot; A leap of faith</div>
+                <p>Launched the journal with a single post about the silence of AI. The response was overwhelming — it became clear that thoughtful storytelling still has a home.</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <h4>First Podcast Episode</h4>
+                <div class="timeline-meta">2024 &middot; Finding a voice</div>
+                <p>Recorded the first podcast episode in a small room with a borrowed mic. Today, the podcast reaches thousands of ears across the globe.</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <h4>500+ Member Milestone</h4>
+                <div class="timeline-meta">2025 &middot; A community grows</div>
+                <p>What started as a solo project became a community. Writers, thinkers, and curious souls gathering around stories that matter.</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <h4>Design & Culture Expansion</h4>
+                <div class="timeline-meta">2025 &middot; New horizons</div>
+                <p>Expanded into design and culture coverage, bringing visual storytelling and cultural commentary to the heart of the journal.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-card">
+        <h2>Let's Connect</h2>
+        <p>Have a story idea, collaboration, or just want to say hello? I'd love to hear from you.</p>
+        <div class="contact-links">
+          <a href="#" class="contact-btn ripple-btn"><i class="fas fa-envelope"></i> Send Email</a>
+          <a href="#" class="contact-btn ripple-btn"><i class="fab fa-twitter"></i> Message</a>
+          <a href="join-hub.html" class="contact-btn ripple-btn"><i class="fas fa-user-plus"></i> Join Hub</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col footer-about">
+          <div class="footer-logo">H.x.H</div>
+          <p>A sanctuary for thoughtful storytelling. We explore culture, technology, design, and the ideas shaping tomorrow.</p>
+          <div class="social-icons">
+            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+        <div class="footer-col"><h4>Journal</h4><ul class="footer-links"><li><a href="blogs.html?category=all">Latest</a></li><li><a href="blogs.html?category=all">Popular</a></li><li><a href="blogs.html?category=all">Editors' Pick</a></li><li><a href="blogs.html?category=all">Archive</a></li></ul></div>
+        <div class="footer-col"><h4>Categories</h4><ul class="footer-links"><li><a href="blogs.html?category=technology">Technology</a></li><li><a href="blogs.html?category=lifestyle">Lifestyle</a></li><li><a href="blogs.html?category=design">Design</a></li><li><a href="blogs.html?category=culture">Culture</a></li></ul></div>
+        <div class="footer-col"><h4>Stay Inspired</h4><p class="newsletter-text">Weekly insights delivered to your inbox.</p><form class="newsletter-form" onsubmit="event.preventDefault();this.querySelector('input').value='';this.querySelector('button').textContent='Subscribed!';setTimeout(()=>this.querySelector('button').textContent='Subscribe',2000);"><input type="email" placeholder="Your email" required><button type="submit">Subscribe</button></form></div>
+      </div>
+      <div class="footer-bottom"><span>&copy; 2025 H.x.H Journal. All rights reserved.</span><div class="footer-links-row"><a href="#">Privacy</a><span class="dot">&middot;</span><a href="#">Terms</a><span class="dot">&middot;</span><a href="#">Cookies</a></div></div>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
