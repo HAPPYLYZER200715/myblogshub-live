@@ -177,47 +177,30 @@ const counterObserver = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.stats-row, .stat-item').forEach(el => counterObserver.observe(el));
 
-// Misty blue gas-like aura following cursor (desktop only)
+// Smooth blue cursor glow (desktop only)
 if (window.innerWidth > 768 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   const glow = document.createElement('div');
-  function setGlowColor() {
-    const d = document.body.classList.contains('dark-theme');
-    glow.style.background = d
-      ? 'radial-gradient(circle at center, rgba(130,185,255,0.15) 0%, rgba(100,160,255,0.07) 40%, transparent 70%)'
-      : 'radial-gradient(circle at center, rgba(140,195,255,0.2) 0%, rgba(120,170,255,0.1) 40%, transparent 70%)';
-  }
-  glow.style.cssText = `
-    position: fixed; top: 0; left: 0; width: 350px; height: 350px;
+  const style = glow.style;
+  style.cssText = `
+    position: fixed; top: 0; left: 0; width: 120px; height: 120px;
     border-radius: 50%; pointer-events: none; z-index: 9999;
+    background: radial-gradient(circle, rgba(100,160,255,0.35) 0%, transparent 70%);
     transform: translate(-50%, -50%);
     opacity: 0; will-change: transform;
-    transition: opacity 0.8s ease;
-    filter: blur(35px);
+    transition: opacity 0.3s ease;
   `;
-  setGlowColor();
   document.body.appendChild(glow);
-  window.__updateGlow = setGlowColor;
 
-  let targetX = 0, targetY = 0, currentX = 0, currentY = 0;
-  let glowTicking = false;
+  let mx = 0, my = 0, cx = 0, cy = 0;
 
-  document.addEventListener('mousemove', (e) => {
-    targetX = e.clientX - 175;
-    targetY = e.clientY - 175;
-    glow.style.opacity = '1';
-  });
+  document.addEventListener('mousemove', (e) => { mx = e.clientX; my = e.clientY; glow.style.opacity = '1'; });
   document.addEventListener('mouseleave', () => { glow.style.opacity = '0'; });
-  document.addEventListener('click', (e) => {
-    targetX = e.clientX - 175;
-    targetY = e.clientY - 175;
-    glow.style.opacity = '1';
-  });
 
-  function drift() {
-    currentX += (targetX - currentX) * 0.08;
-    currentY += (targetY - currentY) * 0.08;
-    glow.style.transform = `translate(${currentX}px, ${currentY}px)`;
-    requestAnimationFrame(drift);
+  function smooth() {
+    cx += (mx - cx) * 0.12;
+    cy += (my - cy) * 0.12;
+    glow.style.transform = `translate(${cx - 60}px, ${cy - 60}px)`;
+    requestAnimationFrame(smooth);
   }
-  drift();
+  smooth();
 }
