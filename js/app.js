@@ -198,20 +198,26 @@ if (window.innerWidth > 768 && !window.matchMedia('(prefers-reduced-motion: redu
   document.body.appendChild(glow);
   window.__updateGlow = setGlowColor;
 
-  let ticking = false;
+  let targetX = 0, targetY = 0, currentX = 0, currentY = 0;
+  let glowTicking = false;
+
   document.addEventListener('mousemove', (e) => {
-    if (!ticking) {
-      requestAnimationFrame(() => {
-        glow.style.transform = `translate(${e.clientX - 80}px, ${e.clientY - 80}px)`;
-        glow.style.opacity = '1';
-        ticking = false;
-      });
-      ticking = true;
-    }
+    targetX = e.clientX - 175;
+    targetY = e.clientY - 175;
+    glow.style.opacity = '1';
   });
   document.addEventListener('mouseleave', () => { glow.style.opacity = '0'; });
   document.addEventListener('click', (e) => {
-    glow.style.transform = `translate(${e.clientX - 80}px, ${e.clientY - 80}px)`;
+    targetX = e.clientX - 175;
+    targetY = e.clientY - 175;
     glow.style.opacity = '1';
   });
+
+  function drift() {
+    currentX += (targetX - currentX) * 0.06;
+    currentY += (targetY - currentY) * 0.06;
+    glow.style.transform = `translate(${currentX}px, ${currentY}px)`;
+    requestAnimationFrame(drift);
+  }
+  drift();
 }
