@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About – MyBlogsHub</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    main { position:relative; padding-top:clamp(110px,15vh,150px); padding-bottom:100px; overflow:hidden; z-index:1; }
+
+    .about-hero { text-align:center; max-width:720px; margin:0 auto clamp(50px,5vw,70px); }
+    .about-hero .badge {
+      display:inline-flex; align-items:center; gap:6px;
+      padding:5px 16px; border-radius:100px; border:1px solid var(--border-color);
+      font-size:0.6rem; font-weight:700; text-transform:uppercase; letter-spacing:2px;
+      color:var(--sub-text); margin-bottom:18px;
+      animation:fadeUp 0.5s cubic-bezier(0.19,1,0.22,1) both;
+    }
+    .about-hero h1 {
+      font-family:'Playfair Display',serif; font-size:clamp(2.4rem,6vw,4.2rem); font-weight:900;
+      letter-spacing:-2px; line-height:1.05; margin-bottom:16px;
+      animation:fadeUp 0.6s 0.1s cubic-bezier(0.19,1,0.22,1) both;
+    }
+    .about-hero p {
+      color:var(--sub-text); font-size:clamp(0.88rem,1.08vw,1rem); line-height:1.85;
+      max-width:540px; margin:0 auto;
+      animation:fadeUp 0.7s 0.2s cubic-bezier(0.19,1,0.22,1) both;
+    }
+
+    .about-grid { display:grid; grid-template-columns:1fr 1fr; gap:clamp(30px,5vw,60px); align-items:center; margin-bottom:70px; }
+    .about-image {
+      border-radius:20px; overflow:hidden; background:var(--border-color);
+      aspect-ratio:4/3; display:flex; align-items:center; justify-content:center;
+      font-size:3rem; color:var(--sub-text); position:relative;
+      opacity:0; animation:fadeUp 0.7s 0.25s cubic-bezier(0.19,1,0.22,1) both;
+    }
+    .about-image i { opacity:0.15; font-size:5rem; }
+    .about-text { opacity:0; animation:fadeUp 0.7s 0.35s cubic-bezier(0.19,1,0.22,1) both; }
+    .about-text h2 {
+      font-family:'Playfair Display',serif; font-size:clamp(1.4rem,2.5vw,1.9rem);
+      font-weight:800; letter-spacing:-1px; margin-bottom:14px; color:var(--text-color);
+    }
+    .about-text p { color:var(--sub-text); font-size:0.9rem; line-height:1.8; margin-bottom:14px; }
+    .about-text p:last-child { margin-bottom:0; }
+
+    .mission-row {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-bottom:70px;
+    }
+    .mission-card {
+      background:var(--card-bg); border:1px solid var(--border-color); border-radius:16px;
+      padding:clamp(22px,3vw,36px); text-align:center;
+      transition:all 0.4s cubic-bezier(0.19,1,0.22,1);
+      opacity:0; transform:translateY(20px);
+      animation:fadeUp 0.5s cubic-bezier(0.19,1,0.22,1) both;
+    }
+    .mission-card:nth-child(1){animation-delay:0.1s;}
+    .mission-card:nth-child(2){animation-delay:0.2s;}
+    .mission-card:nth-child(3){animation-delay:0.3s;}
+    .mission-card:hover { transform:translateY(-4px); border-color:var(--text-color); box-shadow:0 14px 40px rgba(0,0,0,0.05); }
+    .dark-theme .mission-card:hover { box-shadow:0 14px 40px rgba(0,0,0,0.2); }
+    .mission-icon {
+      width:50px;height:50px;border-radius:14px;background:var(--border-color);
+      display:flex;align-items:center;justify-content:center;margin:0 auto 16px;
+      font-size:1.2rem;transition:all 0.35s;
+    }
+    .mission-card:hover .mission-icon { background:var(--text-color); color:var(--bg-color); }
+    .mission-card h3 { font-size:0.95rem; font-weight:700; margin-bottom:8px; color:var(--text-color); }
+    .mission-card p { font-size:0.8rem; color:var(--sub-text); line-height:1.6; }
+
+    .team-section { margin-bottom:0; }
+    .team-section .section-label {
+      text-align:center; font-size:0.6rem; font-weight:700; text-transform:uppercase;
+      letter-spacing:2.5px; color:var(--sub-text); margin-bottom:30px;
+      opacity:0; animation:fadeUp 0.5s 0.3s cubic-bezier(0.19,1,0.22,1) both;
+    }
+    .team-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+    .team-card {
+      text-align:center; padding:clamp(20px,3vw,32px); border-radius:16px;
+      background:var(--card-bg); border:1px solid var(--border-color);
+      transition:all 0.4s cubic-bezier(0.19,1,0.22,1);
+      opacity:0; transform:translateY(20px);
+      animation:fadeUp 0.5s cubic-bezier(0.19,1,0.22,1) both;
+    }
+    .team-card:nth-child(1){animation-delay:0.1s;}
+    .team-card:nth-child(2){animation-delay:0.2s;}
+    .team-card:nth-child(3){animation-delay:0.3s;}
+    .team-card:hover { transform:translateY(-3px); border-color:var(--text-color); }
+    .team-avatar {
+      width:56px;height:56px;border-radius:50%;background:var(--border-color);
+      display:flex;align-items:center;justify-content:center;margin:0 auto 14px;
+      font-size:1.1rem; color:var(--sub-text); transition:all 0.35s;
+    }
+    .team-card:hover .team-avatar { background:var(--text-color); color:var(--bg-color); }
+    .team-card h4 { font-size:0.85rem; font-weight:700; margin-bottom:2px; color:var(--text-color); }
+    .team-card .role { font-size:0.72rem; color:var(--sub-text); margin-bottom:10px; }
+    .team-card .bio { font-size:0.76rem; color:var(--sub-text); line-height:1.6; }
+
+    @media (max-width:860px) {
+      .about-grid { grid-template-columns:1fr; }
+      .about-image { aspect-ratio:16/7; }
+      .team-grid { grid-template-columns:1fr 1fr; }
+    }
+    @media (max-width:768px) {
+      main { padding-top:clamp(105px,13vh,130px); padding-bottom:70px; }
+      .mission-row { grid-template-columns:1fr 1fr; gap:14px; }
+      .team-grid { grid-template-columns:1fr; max-width:380px; margin:0 auto; }
+    }
+    @media (max-width:420px) {
+      .mission-row { grid-template-columns:1fr; }
+      .about-image { aspect-ratio:16/9; }
+    }
+  </style>
+</head>
+<body class="light-theme">
+  <header id="mainHeader">
+    <div class="nav-wrap" id="navWrap">
+      <a href="index.html" class="logo">MyBlogsHub</a>
+      <nav>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="index.html">Home</a></li>
+          <li class="dropdown-parent">
+            <span class="dropdown-toggle">Journal <i class="fas fa-chevron-down"></i></span>
+            <ul class="dropdown-menu">
+              <li><a href="blogs.html?category=all" class="all-cat">All Categories</a></li>
+              <li><a href="blogs.html?category=technology">Technology</a></li>
+              <li><a href="blogs.html?category=lifestyle">Lifestyle</a></li>
+              <li><a href="blogs.html?category=design">Design</a></li>
+              <li><a href="blogs.html?category=culture">Culture</a></li>
+              <li><a href="blogs.html?category=productivity">Productivity</a></li>
+            </ul>
+          </li>
+          <li class="dropdown-parent">
+            <span class="dropdown-toggle">Podcasts <i class="fas fa-chevron-down"></i></span>
+            <ul class="dropdown-menu">
+              <li><a href="podcasts.html?category=all" class="all-cat">All Categories</a></li>
+              <li><a href="podcasts.html?category=technology">Technology</a></li>
+              <li><a href="podcasts.html?category=lifestyle">Lifestyle</a></li>
+              <li><a href="podcasts.html?category=design">Design</a></li>
+              <li><a href="podcasts.html?category=culture">Culture</a></li>
+              <li><a href="podcasts.html?category=productivity">Productivity</a></li>
+            </ul>
+          </li>
+          <li><a href="#">Categories</a></li>
+          <li><a href="#">Archives</a></li>
+          <li><button class="theme-toggle" id="themeToggle"><i class="fas fa-adjust"></i></button></li>
+          <li><a href="join-hub.html" class="join-hub-btn">Join Hub</a></li>
+        </ul>
+        <button class="hamburger-icon" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+      </nav>
+    </div>
+  </header>
+
+  <div id="closeBtn" onclick="toggleMenu()">&times;</div>
+
+  <main>
+    <div class="container">
+      <div class="about-hero">
+        <div class="badge"><i class="fas fa-leaf"></i> Since 2024</div>
+        <h1>Our Story</h1>
+        <p>A quiet corner of the internet where thoughtful storytelling meets curious minds. We believe in the power of words to inspire, challenge, and heal.</p>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-image"><i class="fas fa-book-open"></i></div>
+        <div class="about-text">
+          <h2>Where ideas find a home</h2>
+          <p>MyBlogsHub was born from a simple idea — that the best stories deserve to be told, and the most curious minds deserve a place to gather. What started as a small journal has grown into a community of writers, thinkers, and storytellers.</p>
+          <p>We cover technology, design, culture, lifestyle, and everything in between. Every piece is crafted with care, edited with intention, and published with purpose.</p>
+        </div>
+      </div>
+
+      <div class="mission-row">
+        <div class="mission-card">
+          <div class="mission-icon"><i class="fas fa-bullseye"></i></div>
+          <h3>Our Mission</h3>
+          <p>To create a sanctuary for thoughtful storytelling in an age of noise. Every article, every podcast — made with meaning.</p>
+        </div>
+        <div class="mission-card">
+          <div class="mission-icon"><i class="fas fa-eye"></i></div>
+          <h3>Our Vision</h3>
+          <p>A world where reading is a ritual, not a scroll. Where ideas are savored, not skipped. Curious minds, connected.</p>
+        </div>
+        <div class="mission-card">
+          <div class="mission-icon"><i class="fas fa-heart"></i></div>
+          <h3>Our Values</h3>
+          <p>Depth over speed. Quality over quantity. Connection over clicks. Stories that stay with you long after you close the tab.</p>
+        </div>
+      </div>
+
+      <div class="team-section">
+        <p class="section-label">— Meet the Team —</p>
+        <div class="team-grid">
+          <div class="team-card">
+            <div class="team-avatar"><i class="fas fa-feather-alt"></i></div>
+            <h4>H.x.H</h4>
+            <p class="role">Founder & Editor</p>
+            <p class="bio">Writer, thinker, and curator of stories. Building a home for words that matter.</p>
+          </div>
+          <div class="team-card">
+            <div class="team-avatar"><i class="fas fa-microphone"></i></div>
+            <h4>Aria Wells</h4>
+            <p class="role">Podcast Host</p>
+            <p class="bio">Voice behind our weekly podcasts. Turning conversations into comfort.</p>
+          </div>
+          <div class="team-card">
+            <div class="team-avatar"><i class="fas fa-palette"></i></div>
+            <h4>Rohan Mehta</h4>
+            <p class="role">Design Lead</p>
+            <p class="bio">Crafting visual experiences that feel as good as the words read.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="container">
+    <div class="footer-grid">
+      <div class="footer-col footer-about">
+        <div class="footer-logo">MyBlogsHub</div>
+        <p>A sanctuary for thoughtful storytelling. We explore culture, technology, design, and the ideas shaping tomorrow.</p>
+        <div class="social-icons">
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="footer-col"><h4>Journal</h4><ul class="footer-links"><li><a href="blogs.html?category=all">Latest</a></li><li><a href="blogs.html?category=all">Popular</a></li><li><a href="blogs.html?category=all">Editors' Pick</a></li><li><a href="blogs.html?category=all">Archive</a></li></ul></div>
+      <div class="footer-col"><h4>Categories</h4><ul class="footer-links"><li><a href="blogs.html?category=technology">Technology</a></li><li><a href="blogs.html?category=lifestyle">Lifestyle</a></li><li><a href="blogs.html?category=design">Design</a></li><li><a href="blogs.html?category=culture">Culture</a></li></ul></div>
+      <div class="footer-col"><h4>Stay Inspired</h4><p style="color:var(--sub-text);font-size:clamp(0.78rem,1vw,0.9rem);margin-bottom:15px;">Weekly insights delivered to your inbox.</p><form class="newsletter-form" onsubmit="event.preventDefault();this.querySelector('input').value='';this.querySelector('button').textContent='Subscribed!';"><input type="email" placeholder="Your email address" required><button type="submit">Subscribe</button></form></div>
+    </div>
+    <div class="footer-bottom"><span>&copy; 2025 MyBlogsHub Journal. All rights reserved.</span><div><a href="#">Privacy Policy</a> · <a href="#">Terms of Service</a> · <a href="#">Cookies</a></div></div>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
