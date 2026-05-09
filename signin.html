@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In – MyBlogsHub</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    main { position:relative; padding-top:clamp(110px,15vh,150px); padding-bottom:80px; overflow:hidden; z-index:1; }
+
+    .signin-wrap { max-width:440px; margin:0 auto; }
+    .signin-header { text-align:center; margin-bottom:32px; }
+    .signin-header h1 {
+      font-family:'Playfair Display',serif; font-size:clamp(1.8rem,4vw,2.8rem); font-weight:900;
+      letter-spacing:-1.5px; line-height:1.1; margin-bottom:6px;
+      background:linear-gradient(135deg,var(--text-color) 20%,var(--sub-text) 80%);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .signin-header p { color:var(--sub-text); font-size:0.85rem; }
+
+    .signin-card {
+      background:var(--card-bg); border:1px solid var(--border-color); border-radius:20px;
+      padding:clamp(28px,4vw,44px); position:relative; overflow:hidden;
+    }
+    .signin-card::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:3px;
+      background:linear-gradient(90deg,var(--text-color),var(--sub-text),var(--text-color));
+      background-size:200% 100%; animation:borderGlow 4s ease-in-out infinite;
+    }
+    @keyframes borderGlow { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+
+    .input-group { margin-bottom:16px; }
+    .input-wrap { position:relative; }
+    .input-wrap input {
+      width:100%; background:var(--bg-color); border:1px solid var(--border-color);
+      padding:20px 14px 7px; font-family:'Inter',sans-serif; font-size:0.87rem;
+      color:var(--text-color); border-radius:10px; outline:none;
+      transition:border-color 0.35s, box-shadow 0.35s;
+    }
+    .input-wrap input:focus { border-color:var(--text-color); box-shadow:0 0 0 4px rgba(128,128,128,0.06); }
+    .input-wrap label {
+      position:absolute; top:50%; transform:translateY(-50%); left:14px;
+      font-size:0.83rem; color:var(--sub-text); pointer-events:none;
+      transition:all 0.3s; opacity:0.7;
+    }
+    .input-wrap input:focus + label, .input-wrap input:not(:placeholder-shown) + label {
+      top:5px; transform:translateY(0); font-size:0.58rem; font-weight:700;
+      text-transform:uppercase; letter-spacing:1px; opacity:0.45;
+    }
+
+    .forgot-row { display:flex; justify-content:space-between; align-items:center; margin:-4px 0 20px; }
+    .forgot-row label { font-size:0.75rem; color:var(--sub-text); display:flex; align-items:center; gap:6px; cursor:pointer; }
+    .forgot-row label input[type=checkbox] { accent-color:var(--text-color); width:14px; height:14px; }
+    .forgot-row a { font-size:0.75rem; color:var(--text-color); font-weight:600; text-decoration:none; transition:opacity 0.3s; }
+    .forgot-row a:hover { opacity:0.6; }
+
+    .signin-btn {
+      width:100%; background:var(--text-color); color:var(--bg-color); border:none;
+      padding:13px 26px; font-family:'Inter',sans-serif; font-weight:700;
+      font-size:0.75rem; text-transform:uppercase; letter-spacing:1.5px;
+      border-radius:100px; cursor:pointer; position:relative; overflow:hidden;
+      transition:all 0.4s; display:flex; align-items:center; justify-content:center; gap:10px;
+    }
+    .signin-btn::before {
+      content:''; position:absolute; inset:0; width:70px;
+      background:rgba(255,255,255,0.06); transform:skewX(-20deg) translateX(-120px);
+      transition:transform 0.5s;
+    }
+    .signin-btn:hover::before { transform:skewX(-20deg) translateX(300px); }
+    .signin-btn i { transition:transform 0.35s; }
+    .signin-btn:hover i { transform:translateX(5px); }
+    .signin-btn:hover { opacity:0.9; transform:translateY(-2px); box-shadow:0 14px 35px rgba(0,0,0,0.1); }
+    .signin-btn:active { transform:scale(0.97); }
+
+    .signin-footer { text-align:center; margin-top:18px; color:var(--sub-text); font-size:0.78rem; }
+    .signin-footer a { color:var(--text-color); font-weight:700; text-decoration:none; position:relative; }
+    .signin-footer a::after { content:''; position:absolute; bottom:-1px; left:0; width:0; height:1px; background:var(--text-color); transition:width 0.35s; }
+    .signin-footer a:hover::after { width:100%; }
+
+    .divider { display:flex; align-items:center; gap:14px; margin:24px 0; color:var(--sub-text); font-size:0.7rem; text-transform:uppercase; letter-spacing:1px; }
+    .divider::before, .divider::after { content:''; flex:1; height:1px; background:var(--border-color); }
+
+    .social-signin { display:flex; gap:10px; }
+    .social-signin button {
+      flex:1; padding:10px; border-radius:10px; border:1px solid var(--border-color);
+      background:transparent; color:var(--sub-text); font-size:0.9rem;
+      cursor:pointer; transition:all 0.3s; display:flex; align-items:center; justify-content:center; gap:8px;
+      font-family:'Inter',sans-serif; font-size:0.75rem;
+    }
+    .social-signin button:hover { border-color:var(--text-color); color:var(--text-color); background:var(--border-color); }
+
+    .back-link { display:inline-flex; align-items:center; gap:6px; margin-bottom:24px; color:var(--sub-text); font-size:0.78rem; text-decoration:none; transition:color 0.3s; }
+    .back-link:hover { color:var(--text-color); }
+    .back-link i { font-size:0.65rem; }
+
+    @media (max-width:768px) {
+      main { padding-top:clamp(105px,13vh,130px); }
+      .signin-card { padding:24px 18px; }
+    }
+    @media (max-width:420px) {
+      .signin-card { padding:20px 14px; }
+      .social-signin { flex-direction:column; }
+    }
+  </style>
+</head>
+<body class="light-theme">
+  <header id="mainHeader">
+    <div class="nav-wrap" id="navWrap">
+      <a href="index.html" class="logo">MyBlogsHub</a>
+      <nav>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="index.html">Home</a></li>
+          <li class="dropdown-parent">
+            <span class="dropdown-toggle">Journal <i class="fas fa-chevron-down"></i></span>
+            <ul class="dropdown-menu">
+              <li><a href="blogs.html?category=all" class="all-cat">All Categories</a></li>
+              <li><a href="blogs.html?category=technology">Technology</a></li>
+              <li><a href="blogs.html?category=lifestyle">Lifestyle</a></li>
+              <li><a href="blogs.html?category=design">Design</a></li>
+              <li><a href="blogs.html?category=culture">Culture</a></li>
+              <li><a href="blogs.html?category=productivity">Productivity</a></li>
+            </ul>
+          </li>
+          <li class="dropdown-parent">
+            <span class="dropdown-toggle">Podcasts <i class="fas fa-chevron-down"></i></span>
+            <ul class="dropdown-menu">
+              <li><a href="podcasts.html?category=all" class="all-cat">All Categories</a></li>
+              <li><a href="podcasts.html?category=technology">Technology</a></li>
+              <li><a href="podcasts.html?category=lifestyle">Lifestyle</a></li>
+              <li><a href="podcasts.html?category=design">Design</a></li>
+              <li><a href="podcasts.html?category=culture">Culture</a></li>
+              <li><a href="podcasts.html?category=productivity">Productivity</a></li>
+            </ul>
+          </li>
+          <li><a href="#">Categories</a></li>
+          <li><a href="#">Archives</a></li>
+          <li><button class="theme-toggle" id="themeToggle"><i class="fas fa-adjust"></i></button></li>
+          <li><a href="join-hub.html" class="join-hub-btn">Join Hub</a></li>
+        </ul>
+        <button class="hamburger-icon" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+      </nav>
+    </div>
+  </header>
+
+  <div id="closeBtn" onclick="toggleMenu()">&times;</div>
+
+  <main>
+    <div class="container">
+      <div class="signin-wrap">
+        <a href="join-hub.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Join</a>
+        <div class="signin-header">
+          <h1>Welcome back</h1>
+          <p>Sign in to continue your journey</p>
+        </div>
+        <div class="signin-card">
+          <form onsubmit="event.preventDefault();alert('Signed in successfully!');">
+            <div class="input-group">
+              <div class="input-wrap">
+                <input type="email" placeholder=" " required>
+                <label>Email Address</label>
+              </div>
+            </div>
+            <div class="input-group">
+              <div class="input-wrap">
+                <input type="password" placeholder=" " required minlength="6">
+                <label>Password</label>
+              </div>
+            </div>
+            <div class="forgot-row">
+              <label><input type="checkbox"> Remember me</label>
+              <a href="#">Forgot password?</a>
+            </div>
+            <button type="submit" class="signin-btn">Sign In <i class="fas fa-arrow-right"></i></button>
+          </form>
+          <div class="divider">or continue with</div>
+          <div class="social-signin">
+            <button><i class="fab fa-google"></i> Google</button>
+            <button><i class="fab fa-github"></i> GitHub</button>
+          </div>
+          <p class="signin-footer">Don't have an account? <a href="join-hub.html">Join the Circle</a></p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="container">
+    <div class="footer-grid">
+      <div class="footer-col footer-about">
+        <div class="footer-logo">MyBlogsHub</div>
+        <p>A sanctuary for thoughtful storytelling. We explore culture, technology, design, and the ideas shaping tomorrow.</p>
+        <div class="social-icons">
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="footer-col"><h4>Journal</h4><ul class="footer-links"><li><a href="blogs.html?category=all">Latest</a></li><li><a href="blogs.html?category=all">Popular</a></li><li><a href="blogs.html?category=all">Editors' Pick</a></li><li><a href="blogs.html?category=all">Archive</a></li></ul></div>
+      <div class="footer-col"><h4>Categories</h4><ul class="footer-links"><li><a href="blogs.html?category=technology">Technology</a></li><li><a href="blogs.html?category=lifestyle">Lifestyle</a></li><li><a href="blogs.html?category=design">Design</a></li><li><a href="blogs.html?category=culture">Culture</a></li></ul></div>
+      <div class="footer-col"><h4>Stay Inspired</h4><p style="color:var(--sub-text);font-size:clamp(0.78rem,1vw,0.9rem);margin-bottom:15px;">Weekly insights delivered to your inbox.</p><form class="newsletter-form" onsubmit="event.preventDefault();this.querySelector('input').value='';this.querySelector('button').textContent='Subscribed!';"><input type="email" placeholder="Your email address" required><button type="submit">Subscribe</button></form></div>
+    </div>
+    <div class="footer-bottom"><span>&copy; 2025 MyBlogsHub Journal. All rights reserved.</span><div><a href="#">Privacy Policy</a> · <a href="#">Terms of Service</a> · <a href="#">Cookies</a></div></div>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
