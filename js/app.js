@@ -176,24 +176,43 @@ const counterObserver = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.stats-row, .stat-item').forEach(el => counterObserver.observe(el));
 
-// Subtle cursor glow (only on desktop, GPU-optimized)
+// Subtle light blue blur glow (desktop only, GPU-optimized)
 if (window.innerWidth > 768 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   const glow = document.createElement('div');
   glow.style.cssText = `
-    position: fixed; top: 0; left: 0; width: 300px; height: 300px;
-    border-radius: 50%; pointer-events: none; z-index: 9999;
-    background: radial-gradient(circle, rgba(128,128,128,0.04) 0%, transparent 70%);
+    position: fixed; top: 0; left: 0; width: 400px; height: 400px;
+    border-radius: 50%; pointer-events: none; z-index: -1;
+    background: radial-gradient(circle, rgba(180,210,255,0.12) 0%, rgba(160,200,255,0.06) 40%, transparent 70%);
     transform: translate(-50%, -50%);
-    transition: opacity 0.3s ease;
+    transition: opacity 0.4s ease;
     opacity: 0; will-change: transform;
   `;
   document.body.appendChild(glow);
+
+  const glow2 = document.createElement('div');
+  glow2.style.cssText = `
+    position: fixed; bottom: -100px; right: -100px; width: 500px; height: 500px;
+    border-radius: 50%; pointer-events: none; z-index: -1;
+    background: radial-gradient(circle, rgba(180,210,255,0.08) 0%, transparent 60%);
+    transform: translate(0, 0);
+    will-change: transform;
+  `;
+  document.body.appendChild(glow2);
+
+  const glow3 = document.createElement('div');
+  glow3.style.cssText = `
+    position: fixed; top: 30%; left: -150px; width: 400px; height: 400px;
+    border-radius: 50%; pointer-events: none; z-index: -1;
+    background: radial-gradient(circle, rgba(180,210,255,0.06) 0%, transparent 60%);
+    will-change: transform;
+  `;
+  document.body.appendChild(glow3);
 
   let glowTicking = false;
   document.addEventListener('mousemove', (e) => {
     if (!glowTicking) {
       requestAnimationFrame(() => {
-        glow.style.transform = `translate(${e.clientX - 150}px, ${e.clientY - 150}px)`;
+        glow.style.transform = `translate(${e.clientX - 200}px, ${e.clientY - 200}px)`;
         if (!glow.style.opacity || glow.style.opacity === '0') glow.style.opacity = '1';
         glowTicking = false;
       });
