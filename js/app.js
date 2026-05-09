@@ -183,11 +183,11 @@ if (window.innerWidth > 768 && !window.matchMedia('(prefers-reduced-motion: redu
   function setGlowColor() {
     const d = document.body.classList.contains('dark-theme');
     glow.style.background = d
-      ? 'radial-gradient(circle, rgba(120,170,255,0.12) 0%, transparent 65%)'
-      : 'radial-gradient(circle, rgba(150,195,255,0.18) 0%, transparent 65%)';
+      ? 'radial-gradient(circle, rgba(120,170,255,0.07) 0%, transparent 65%)'
+      : 'radial-gradient(circle, rgba(140,185,255,0.1) 0%, transparent 65%)';
   }
   glow.style.cssText = `
-    position: fixed; top: 0; left: 0; width: 280px; height: 280px;
+    position: fixed; top: 0; left: 0; width: 160px; height: 160px;
     border-radius: 50%; pointer-events: none; z-index: 9999;
     transform: translate(-50%, -50%);
     opacity: 0; will-change: transform;
@@ -201,7 +201,7 @@ if (window.innerWidth > 768 && !window.matchMedia('(prefers-reduced-motion: redu
   document.addEventListener('mousemove', (e) => {
     if (!ticking) {
       requestAnimationFrame(() => {
-        glow.style.transform = `translate(${e.clientX - 125}px, ${e.clientY - 125}px)`;
+        glow.style.transform = `translate(${e.clientX - 80}px, ${e.clientY - 80}px)`;
         glow.style.opacity = '1';
         ticking = false;
       });
@@ -210,7 +210,7 @@ if (window.innerWidth > 768 && !window.matchMedia('(prefers-reduced-motion: redu
   });
   document.addEventListener('mouseleave', () => { glow.style.opacity = '0'; });
   document.addEventListener('click', (e) => {
-    glow.style.transform = `translate(${e.clientX - 125}px, ${e.clientY - 125}px)`;
+    glow.style.transform = `translate(${e.clientX - 80}px, ${e.clientY - 80}px)`;
     glow.style.opacity = '1';
   });
 }
