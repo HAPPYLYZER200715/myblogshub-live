@@ -97,19 +97,6 @@
     }
 
     /* Focus Mode */
-    .focus-btn {
-      position:fixed; bottom:clamp(20px,3vw,32px); right:clamp(20px,3vw,32px);
-      z-index:999; width:44px;height:44px;border-radius:50%;
-      background:var(--card-bg); border:1px solid var(--border-color);
-      color:var(--sub-text); font-size:1rem; cursor:pointer;
-      display:flex;align-items:center;justify-content:center;
-      transition:all 0.4s var(--spring); backdrop-filter:blur(12px);
-      box-shadow:var(--shadow-sm); opacity:0; transform:scale(0.8);
-      pointer-events:none;
-    }
-    .focus-btn.show { opacity:1; transform:scale(1); pointer-events:auto; }
-    .focus-btn:hover { background:var(--text-color); color:var(--bg-color); border-color:var(--text-color); transform:scale(1.1); box-shadow:var(--shadow-md); }
-
     body.focus-mode header,
     body.focus-mode footer,
     body.focus-mode .back-btn,
@@ -128,7 +115,6 @@
     body.focus-mode .post-header { margin-bottom:clamp(16px,2vw,28px); }
     body.focus-mode .post-header h1 { font-size:clamp(1.6rem,3.5vw,2.4rem); margin-bottom:0; }
     body.focus-mode .container { padding:0 clamp(30px,6vw,60px); }
-    body.focus-mode .focus-btn i::before { content:'\f065'; }
 
     .focus-hint {
       text-align:center; margin-top:clamp(20px,3vw,36px);
@@ -196,9 +182,8 @@
       <div class="post-wrap" id="postWrap">
         <div class="post-loading" id="postLoading">Loading journal...</div>
       </div>
-      <div class="focus-hint" id="focusHint">Double-tap content for focus mode &middot; <i class="fas fa-expand-alt"></i></div>
+      <div class="focus-hint" id="focusHint">Double-click content for focus reading <i class="fas fa-arrows-alt"></i></div>
     </div>
-    <button class="focus-btn" id="focusBtn" onclick="toggleFocus()" aria-label="Toggle focus mode"><i class="fas fa-expand-alt"></i></button>
   </main>
 
   <footer>
@@ -278,33 +263,18 @@
         </div>
       `;
 
-      window.toggleFocus = function() {
+      function toggleFocus() {
         document.body.classList.toggle('focus-mode');
-        const btn = document.getElementById('focusBtn');
-        const isFocus = document.body.classList.contains('focus-mode');
-        btn.innerHTML = isFocus ? '<i class="fas fa-compress-alt"></i>' : '<i class="fas fa-expand-alt"></i>';
-        btn.classList.add('show');
-        if (isFocus) window.scrollTo({ top: 0, behavior: 'smooth' });
-      };
+        if (document.body.classList.contains('focus-mode')) window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
 
       document.querySelector('.post-body').addEventListener('dblclick', function(e) {
-        if (!e.target.closest('a') && !e.target.closest('button')) {
-          window.toggleFocus();
-        }
+        if (!e.target.closest('a') && !e.target.closest('button')) toggleFocus();
       });
 
       document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && document.body.classList.contains('focus-mode')) {
-          window.toggleFocus();
-        }
+        if (e.key === 'Escape' && document.body.classList.contains('focus-mode')) toggleFocus();
       });
-
-      const focusBtn = document.getElementById('focusBtn');
-      setTimeout(() => focusBtn.classList.add('show'), 1500);
-      document.addEventListener('scroll', () => {
-        if (window.scrollY > 300) focusBtn.classList.add('show');
-        else if (!document.body.classList.contains('focus-mode')) focusBtn.classList.remove('show');
-      }, { passive: true });
     })();
   </script>
 </body>
