@@ -182,7 +182,7 @@
       <div class="post-wrap" id="postWrap">
         <div class="post-loading" id="postLoading">Loading journal...</div>
       </div>
-      <div class="focus-hint" id="focusHint">Double-click content for focus reading <i class="fas fa-arrows-alt"></i></div>
+      <div class="focus-hint" id="focusHint"><span id="focusMsg">Double-click anywhere to enter focus mode</span> <i class="fas fa-arrows-alt"></i></div>
     </div>
   </main>
 
@@ -265,7 +265,13 @@
 
       function toggleFocus() {
         document.body.classList.toggle('focus-mode');
-        if (document.body.classList.contains('focus-mode')) window.scrollTo({ top: 0, behavior: 'smooth' });
+        const msg = document.getElementById('focusMsg');
+        if (document.body.classList.contains('focus-mode')) {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          msg.textContent = 'Double-click or press Escape to exit focus mode';
+        } else {
+          msg.textContent = 'Double-click anywhere to enter focus mode';
+        }
       }
 
       document.querySelector('.post-body').addEventListener('dblclick', function(e) {
