@@ -96,6 +96,48 @@
       text-align:center; padding:80px 20px; color:var(--sub-text); font-size:0.9rem;
     }
 
+    /* Focus Mode */
+    .focus-btn {
+      position:fixed; bottom:clamp(20px,3vw,32px); right:clamp(20px,3vw,32px);
+      z-index:999; width:44px;height:44px;border-radius:50%;
+      background:var(--card-bg); border:1px solid var(--border-color);
+      color:var(--sub-text); font-size:1rem; cursor:pointer;
+      display:flex;align-items:center;justify-content:center;
+      transition:all 0.4s var(--spring); backdrop-filter:blur(12px);
+      box-shadow:var(--shadow-sm); opacity:0; transform:scale(0.8);
+      pointer-events:none;
+    }
+    .focus-btn.show { opacity:1; transform:scale(1); pointer-events:auto; }
+    .focus-btn:hover { background:var(--text-color); color:var(--bg-color); border-color:var(--text-color); transform:scale(1.1); box-shadow:var(--shadow-md); }
+
+    body.focus-mode header,
+    body.focus-mode footer,
+    body.focus-mode .back-btn,
+    body.focus-mode .post-nav,
+    body.focus-mode .post-footer,
+    body.focus-mode .post-img,
+    body.focus-mode .post-header .post-meta,
+    body.focus-mode .post-header .post-cat { display:none !important; }
+    body.focus-mode main {
+      padding-top:clamp(30px,5vh,60px); padding-bottom:clamp(30px,5vh,60px);
+      animation:none;
+    }
+    body.focus-mode .post-wrap { max-width:720px; }
+    body.focus-mode .post-body p { font-size:clamp(1rem,1.3vw,1.15rem); line-height:2; }
+    body.focus-mode .post-body p:first-child::first-letter { font-size:3.6em; }
+    body.focus-mode .post-header { margin-bottom:clamp(16px,2vw,28px); }
+    body.focus-mode .post-header h1 { font-size:clamp(1.6rem,3.5vw,2.4rem); margin-bottom:0; }
+    body.focus-mode .container { padding:0 clamp(30px,6vw,60px); }
+    body.focus-mode .focus-btn i::before { content:'\f065'; }
+
+    .focus-hint {
+      text-align:center; margin-top:clamp(20px,3vw,36px);
+      font-size:0.65rem; color:var(--sub-text); opacity:0.5;
+      letter-spacing:1px; text-transform:uppercase; font-weight:600;
+      transition:opacity 0.4s;
+    }
+    body.focus-mode .focus-hint { opacity:0; pointer-events:none; }
+
     @media (max-width:768px) {
       main { padding-top:clamp(105px,13vh,130px); padding-bottom:70px; }
       .post-body p { font-size:0.95rem; }
@@ -154,7 +196,9 @@
       <div class="post-wrap" id="postWrap">
         <div class="post-loading" id="postLoading">Loading journal...</div>
       </div>
+      <div class="focus-hint" id="focusHint">Double-tap content for focus mode &middot; <i class="fas fa-expand-alt"></i></div>
     </div>
+    <button class="focus-btn" id="focusBtn" onclick="toggleFocus()" aria-label="Toggle focus mode"><i class="fas fa-expand-alt"></i></button>
   </main>
 
   <footer>
@@ -233,6 +277,34 @@
           ${next ? `<a href="post.html?id=${next.id}" class="tilt-card"><div class="nav-label">Next <i class="fas fa-arrow-right"></i></div><div class="nav-title">${next.title}</div></a>` : '<div></div>'}
         </div>
       `;
+
+      window.toggleFocus = function() {
+        document.body.classList.toggle('focus-mode');
+        const btn = document.getElementById('focusBtn');
+        const isFocus = document.body.classList.contains('focus-mode');
+        btn.innerHTML = isFocus ? '<i class="fas fa-compress-alt"></i>' : '<i class="fas fa-expand-alt"></i>';
+        btn.classList.add('show');
+        if (isFocus) window.scrollTo({ top: 0, behavior: 'smooth' });
+      };
+
+      document.querySelector('.post-body').addEventListener('dblclick', function(e) {
+        if (!e.target.closest('a') && !e.target.closest('button')) {
+          window.toggleFocus();
+        }
+      });
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && document.body.classList.contains('focus-mode')) {
+          window.toggleFocus();
+        }
+      });
+
+      const focusBtn = document.getElementById('focusBtn');
+      setTimeout(() => focusBtn.classList.add('show'), 1500);
+      document.addEventListener('scroll', () => {
+        if (window.scrollY > 300) focusBtn.classList.add('show');
+        else if (!document.body.classList.contains('focus-mode')) focusBtn.classList.remove('show');
+      }, { passive: true });
     })();
   </script>
 </body>
