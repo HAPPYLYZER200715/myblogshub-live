@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Journal – H.x.H</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    main { position:relative; padding-top:clamp(110px,15vh,150px); padding-bottom:100px; overflow:hidden; z-index:1; }
+
+    .post-wrap { max-width:760px; margin:0 auto; }
+    .post-header { text-align:center; margin-bottom:clamp(30px,4vw,50px); }
+    .post-header .post-cat {
+      display:inline-block; font-size:0.6rem; font-weight:700; text-transform:uppercase;
+      letter-spacing:2px; color:var(--sub-text); margin-bottom:14px;
+      animation:fadeUp 0.6s 0.05s var(--smooth) both;
+    }
+    .post-header h1 {
+      font-family:'Playfair Display',serif; font-size:clamp(2rem,5vw,3.5rem);
+      font-weight:900; letter-spacing:-2px; line-height:1.05; margin-bottom:14px;
+      animation:fadeUp 0.6s 0.1s var(--smooth) both;
+    }
+    .post-header .post-meta {
+      font-size:0.72rem; color:var(--sub-text); font-weight:500;
+      display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap;
+      animation:fadeUp 0.6s 0.15s var(--smooth) both;
+    }
+    .post-header .post-meta .dot { font-size:0.4rem; }
+
+    .post-img {
+      width:100%; border-radius:20px; overflow:hidden;
+      margin-bottom:clamp(30px,4vw,50px); background:var(--border-color);
+      aspect-ratio:16/9; position:relative;
+      animation:fadeUp 0.7s 0.2s var(--smooth) both;
+    }
+    .post-img img { width:100%; height:100%; object-fit:cover; }
+
+    .post-body {
+      animation:fadeUp 0.8s 0.25s var(--smooth) both;
+    }
+    .post-body p {
+      font-size:clamp(0.95rem,1.15vw,1.08rem);
+      color:var(--text-color); line-height:1.9; margin-bottom:1.6em;
+      font-weight:400;
+    }
+    .post-body p:first-child::first-letter {
+      font-family:'Playfair Display',serif; font-size:3.2em; font-weight:900;
+      float:left; line-height:0.9; margin-right:10px; margin-top:4px;
+      color:var(--text-color);
+    }
+    .post-body strong { font-weight:700; }
+    .post-body em { font-style:italic; color:var(--sub-text); }
+
+    .post-footer {
+      margin-top:clamp(40px,6vw,70px); padding-top:clamp(24px,3vw,36px);
+      border-top:1px solid var(--border-color);
+      animation:fadeUp 0.7s 0.3s var(--smooth) both;
+    }
+    .post-footer-row {
+      display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px;
+    }
+    .post-tags { display:flex; gap:8px; flex-wrap:wrap; }
+    .post-tag {
+      font-size:0.6rem; text-transform:uppercase; letter-spacing:1px; font-weight:700;
+      padding:5px 14px; border-radius:100px; border:1px solid var(--border-color);
+      color:var(--sub-text); transition:all 0.3s var(--smooth);
+    }
+    .post-tag:hover { background:var(--text-color); color:var(--bg-color); border-color:var(--text-color); }
+    .post-share { display:flex; gap:8px; }
+    .post-share a {
+      width:36px;height:36px;border-radius:50%;border:1px solid var(--border-color);
+      display:flex;align-items:center;justify-content:center;
+      color:var(--sub-text);text-decoration:none;font-size:0.8rem;
+      transition:all 0.35s var(--spring);
+    }
+    .post-share a:hover { background:var(--text-color);color:var(--bg-color);border-color:var(--text-color);transform:translateY(-2px); }
+
+    .post-nav {
+      display:grid; grid-template-columns:1fr 1fr; gap:16px;
+      margin-top:clamp(30px,4vw,50px);
+    }
+    .post-nav a {
+      padding:clamp(18px,2.5vw,28px); border-radius:14px;
+      border:1px solid var(--border-color); background:var(--card-bg);
+      text-decoration:none; transition:all 0.4s var(--spring);
+      animation:fadeUp 0.7s var(--smooth) both;
+    }
+    .post-nav a:hover { transform:translateY(-4px); border-color:var(--border-color); box-shadow:var(--shadow-hover); }
+    .post-nav a:first-child { text-align:left; }
+    .post-nav a:last-child { text-align:right; }
+    .post-nav .nav-label { font-size:0.6rem; text-transform:uppercase; letter-spacing:1.5px; color:var(--sub-text); font-weight:600; margin-bottom:4px; }
+    .post-nav .nav-title { font-size:0.82rem; font-weight:700; color:var(--text-color); }
+
+    .post-loading {
+      text-align:center; padding:80px 20px; color:var(--sub-text); font-size:0.9rem;
+    }
+
+    @media (max-width:768px) {
+      main { padding-top:clamp(105px,13vh,130px); padding-bottom:70px; }
+      .post-body p { font-size:0.95rem; }
+      .post-nav { grid-template-columns:1fr; }
+    }
+    @media (max-width:420px) {
+      .post-body p { font-size:0.9rem; line-height:1.8; }
+      .post-header h1 { font-size:1.8rem; }
+      .post-footer-row { flex-direction:column; align-items:flex-start; }
+    }
+  </style>
+</head>
+<body class="light-theme">
+  <header id="mainHeader">
+    <div class="nav-wrap" id="navWrap">
+      <a href="index.html" class="logo">MyBlogsHub</a>
+      <nav>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="index.html">Home</a></li>
+          <li class="dropdown-parent">
+            <span class="dropdown-toggle">Journal <i class="fas fa-chevron-down"></i></span>
+            <ul class="dropdown-menu">
+              <li><a href="blogs.html?category=all" class="all-cat">All Categories</a></li>
+              <li><a href="blogs.html?category=technology">Technology</a></li>
+              <li><a href="blogs.html?category=lifestyle">Lifestyle</a></li>
+              <li><a href="blogs.html?category=design">Design</a></li>
+              <li><a href="blogs.html?category=culture">Culture</a></li>
+              <li><a href="blogs.html?category=productivity">Productivity</a></li>
+            </ul>
+          </li>
+          <li class="dropdown-parent">
+            <span class="dropdown-toggle">Podcasts <i class="fas fa-chevron-down"></i></span>
+            <ul class="dropdown-menu">
+              <li><a href="podcasts.html?category=all" class="all-cat">All Categories</a></li>
+              <li><a href="podcasts.html?category=technology">Technology</a></li>
+              <li><a href="podcasts.html?category=lifestyle">Lifestyle</a></li>
+              <li><a href="podcasts.html?category=design">Design</a></li>
+              <li><a href="podcasts.html?category=culture">Culture</a></li>
+              <li><a href="podcasts.html?category=productivity">Productivity</a></li>
+            </ul>
+          </li>
+          <li><a href="profile.html">Profile</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><button class="theme-toggle" id="themeToggle"><i class="fas fa-adjust"></i></button></li>
+          <li><a href="join-hub.html" class="join-hub-btn ripple-btn">Join Hub</a></li>
+        </ul>
+        <button class="hamburger-icon" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+      </nav>
+    </div>
+  </header>
+
+  <div id="closeBtn" onclick="toggleMenu()">&times;</div>
+
+  <main>
+    <div class="container">
+      <div class="post-wrap" id="postWrap">
+        <div class="post-loading" id="postLoading">Loading journal...</div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col footer-about">
+          <div class="footer-logo">H.x.H</div>
+          <p>A sanctuary for thoughtful storytelling. We explore culture, technology, design, and the ideas shaping tomorrow.</p>
+          <div class="social-icons">
+            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+        <div class="footer-col"><h4>Journal</h4><ul class="footer-links"><li><a href="blogs.html?category=all">Latest</a></li><li><a href="blogs.html?category=all">Popular</a></li><li><a href="blogs.html?category=all">Editors' Pick</a></li><li><a href="profile.html">Profile</a></li><li><a href="blogs.html?category=all">Archive</a></li></ul></div>
+        <div class="footer-col"><h4>Categories</h4><ul class="footer-links"><li><a href="blogs.html?category=technology">Technology</a></li><li><a href="blogs.html?category=lifestyle">Lifestyle</a></li><li><a href="blogs.html?category=design">Design</a></li><li><a href="blogs.html?category=culture">Culture</a></li></ul></div>
+        <div class="footer-col"><h4>Stay Inspired</h4><p class="newsletter-text">Weekly insights delivered to your inbox.</p><form class="newsletter-form" onsubmit="event.preventDefault();this.querySelector('input').value='';this.querySelector('button').textContent='Subscribed!';setTimeout(()=>this.querySelector('button').textContent='Subscribe',2000);"><input type="email" placeholder="Your email" required><button type="submit">Subscribe</button></form></div>
+      </div>
+      <div class="footer-bottom"><span>&copy; 2025 H.x.H Journal. All rights reserved.</span><div class="footer-links-row"><a href="#">Privacy</a><span class="dot">&middot;</span><a href="#">Terms</a><span class="dot">&middot;</span><a href="#">Cookies</a></div></div>
+    </div>
+  </footer>
+
+  <script src="js/blog-data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      const id = parseInt(params.get('id'), 10);
+      const post = allBlogs.find(b => b.id === id);
+
+      const wrap = document.getElementById('postWrap');
+      const loading = document.getElementById('postLoading');
+
+      if (!post) {
+        loading.innerHTML = '<div style="text-align:center;padding:60px 20px;"><p style="font-size:1.5rem;margin-bottom:10px;">Journal not found</p><a href="blogs.html" class="back-btn" style="justify-content:center;"><i class="fas fa-arrow-left"></i> Browse all journals</a></div>';
+        return;
+      }
+
+      document.title = post.title + ' – H.x.H';
+
+      const prev = allBlogs.filter(b => b.id < id).pop();
+      const next = allBlogs.filter(b => b.id > id)[0];
+
+      const shareUrl = encodeURIComponent(window.location.href);
+      const shareText = encodeURIComponent(post.title + ' – H.x.H Journal');
+
+      wrap.innerHTML = `
+        <a href="blogs.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Journals</a>
+        <div class="post-header">
+          <div class="post-cat">${post.category}</div>
+          <h1>${post.title}.</h1>
+          <div class="post-meta">
+            <span>${post.meta}</span>
+            <span class="dot">&middot;</span>
+            <span>By H.x.H</span>
+          </div>
+        </div>
+        <div class="post-img"><img src="${post.img}" alt="${post.title}" loading="lazy"></div>
+        <div class="post-body">${post.body}</div>
+        <div class="post-footer">
+          <div class="post-footer-row">
+            <div class="post-tags">
+              <span class="post-tag">${post.category}</span>
+              <span class="post-tag">Journal</span>
+            </div>
+            <div class="post-share">
+              <a href="https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}" target="_blank" aria-label="Share on Twitter"><i class="fab fa-twitter"></i></a>
+              <a href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" aria-label="Share on Facebook"><i class="fab fa-facebook-f"></i></a>
+              <a href="https://www.linkedin.com/shareArticle?mini=true&url=${shareUrl}&title=${shareText}" target="_blank" aria-label="Share on LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="post-nav">
+          ${prev ? `<a href="post.html?id=${prev.id}" class="tilt-card"><div class="nav-label"><i class="fas fa-arrow-left"></i> Previous</div><div class="nav-title">${prev.title}</div></a>` : '<div></div>'}
+          ${next ? `<a href="post.html?id=${next.id}" class="tilt-card"><div class="nav-label">Next <i class="fas fa-arrow-right"></i></div><div class="nav-title">${next.title}</div></a>` : '<div></div>'}
+        </div>
+      `;
+    })();
+  </script>
+</body>
+</html>
